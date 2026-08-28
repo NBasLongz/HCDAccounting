@@ -20,6 +20,7 @@ def extract_lines(pdf_path: str) -> list[str]:
 
 RECEIPT_ID_RE = re.compile(r"^[A-Za-zÀ-Ỹà-ỹ]{1,6}-\d{1,6}$")
 ITEM_RE = re.compile(r"^(\d+)x\s+(.+?)\s+(-?[\d][\d.,]*)\s*₫?$")
+QTY_ITEM_START_RE = re.compile(r"^(\d+)x\s+(.+)$")
 QTY_ONLY_RE = re.compile(r"^(\d+)x$")
 TRAILING_AMOUNT_RE = re.compile(r"^(.+?)\s+(-?[\d][\d.,]*)\s*₫?$")
 PROMO_CODE_RE = re.compile(r"^[A-Z0-9]{6,20}$")
@@ -75,6 +76,9 @@ def parse_receipt(lines: list[str]) -> Receipt:
     raw_items_with_qty: list[tuple[str, Row]] = []
     discount_rows: list[Row] = []
 
+    last_target: Optional[tuple[str, Row]] = None
+    pending_item_name: Optional[tuple[str, str]] = None
+
     for line in lines[1:]:
         if line.startswith("Mira GoodFood"):
             break
@@ -87,37 +91,73 @@ def parse_receipt(lines: list[str]) -> Receipt:
             if line.startswith("Tổng cộng") and (match := TRAILING_AMOUNT_RE.match(line)):
                 receipt.pdf_total = parse_vn_number(match.group(2))
             continue
+
+        # 1. Full item on a single line: 1x Name 100.000₫
         if match := ITEM_RE.match(line):
             qty_num, name, amount = match.groups()
             current_qty = f"{qty_num}x"
-            raw_items_with_qty.append((current_qty, Row("item", name.strip(), parse_vn_number(amount))))
+            item_row = Row("item", name.strip(), parse_vn_number(amount))
+            raw_items_with_qty.append((current_qty, item_row))
+            last_target = ("item", item_row)
+            pending_item_name = None
             in_discount_section = False
             continue
+
+        # 2. Quantity header only: 1x
         if match := QTY_ONLY_RE.match(line):
             current_qty = f"{match.group(1)}x"
+            pending_item_name = None
             continue
+
+        # 3. Item starts on line with quantity but amount is wrapped to next line: 1x Name starts here...
+        if match := QTY_ITEM_START_RE.match(line):
+            qty_num, partial_name = match.groups()
+            current_qty = f"{qty_num}x"
+            pending_item_name = (current_qty, partial_name.strip())
+            continue
+
+        # 4. Discount by keyword/emoji hint: 🌸Flash sale 50% -9.920₫
         if any(hint in line.lower() or hint in line for hint in DISCOUNT_HINTS):
             if match := TRAILING_AMOUNT_RE.match(line):
-                discount_rows.append(Row("discount", match.group(1).strip(), parse_vn_number(match.group(2))))
+                disc_row = Row("discount", match.group(1).strip(), parse_vn_number(match.group(2)))
+                discount_rows.append(disc_row)
+                last_target = ("discount", disc_row)
+                pending_item_name = None
             continue
+
+        # 5. Line with trailing amount: Name/Code amount
         if match := TRAILING_AMOUNT_RE.match(line):
             label, raw_amount = match.groups()
             amount = parse_vn_number(raw_amount)
             if in_discount_section and PROMO_CODE_RE.match(label.strip()) and amount > 0:
                 amount = -amount
-            if amount < 0 or in_discount_section:
-                discount_rows.append(Row("discount", label.strip(), amount))
-            else:
-                raw_items_with_qty.append((current_qty, Row("item", label.strip(), amount)))
-            continue
-        # Multiline text continuation
-        if raw_items_with_qty and not discount_rows:
-            last_qty, last_item = raw_items_with_qty[-1]
-            last_item.label = f"{last_item.label} {line}".strip()
-        elif discount_rows:
-            discount_rows[-1].label = f"{discount_rows[-1].label} {line}".strip()
 
-    # Group items by quantity (1x, 2x, 3x...)
+            if amount < 0 or in_discount_section:
+                disc_row = Row("discount", label.strip(), amount)
+                discount_rows.append(disc_row)
+                last_target = ("discount", disc_row)
+            else:
+                if pending_item_name:
+                    p_qty, p_name = pending_item_name
+                    full_name = f"{p_name} {label.strip()}".strip()
+                    item_row = Row("item", full_name, amount)
+                    raw_items_with_qty.append((p_qty, item_row))
+                else:
+                    item_row = Row("item", label.strip(), amount)
+                    raw_items_with_qty.append((current_qty, item_row))
+                last_target = ("item", item_row)
+            pending_item_name = None
+            continue
+
+        # 6. Text-only wrapped continuation line (no price, no qty prefix)
+        if pending_item_name:
+            p_qty, p_name = pending_item_name
+            pending_item_name = (p_qty, f"{p_name} {line.strip()}".strip())
+        elif last_target:
+            target_type, target_row = last_target
+            target_row.label = f"{target_row.label} {line.strip()}".strip()
+
+    # Group items by quantity dynamically (descending order: 3x, 2x, 1x...)
     qty_groups: dict[str, list[Row]] = {}
     for q, item in raw_items_with_qty:
         if q not in qty_groups:
