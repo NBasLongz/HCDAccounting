@@ -69,9 +69,11 @@ def parse_receipt(lines: list[str]) -> Receipt:
         raise ValueError("PDF không có nội dung văn bản")
     receipt_id = lines[0]
     receipt = Receipt(receipt_id=receipt_id, display_name=f"Receipt-{receipt_id}.pdf")
-    last_qty: Optional[str] = None
+    current_qty: str = "1x"
     in_discount_section = False
-    raw_rows: list[Row] = []
+
+    raw_items_with_qty: list[tuple[str, Row]] = []
+    discount_rows: list[Row] = []
 
     for line in lines[1:]:
         if line.startswith("Mira GoodFood"):
@@ -86,53 +88,69 @@ def parse_receipt(lines: list[str]) -> Receipt:
                 receipt.pdf_total = parse_vn_number(match.group(2))
             continue
         if match := ITEM_RE.match(line):
-            qty, name, amount = match.groups()
-            if qty != last_qty:
-                raw_rows.append(Row("qty", f"{qty}x"))
-                last_qty = qty
-            raw_rows.append(Row("item", name, parse_vn_number(amount)))
+            qty_num, name, amount = match.groups()
+            current_qty = f"{qty_num}x"
+            raw_items_with_qty.append((current_qty, Row("item", name.strip(), parse_vn_number(amount))))
             in_discount_section = False
             continue
         if match := QTY_ONLY_RE.match(line):
-            qty = match.group(1)
-            if qty != last_qty:
-                raw_rows.append(Row("qty", f"{qty}x"))
-                last_qty = qty
+            current_qty = f"{match.group(1)}x"
             continue
         if any(hint in line.lower() or hint in line for hint in DISCOUNT_HINTS):
             if match := TRAILING_AMOUNT_RE.match(line):
-                raw_rows.append(Row("discount", match.group(1).strip(), parse_vn_number(match.group(2))))
+                discount_rows.append(Row("discount", match.group(1).strip(), parse_vn_number(match.group(2))))
             continue
         if match := TRAILING_AMOUNT_RE.match(line):
             label, raw_amount = match.groups()
             amount = parse_vn_number(raw_amount)
             if in_discount_section and PROMO_CODE_RE.match(label.strip()) and amount > 0:
                 amount = -amount
-            raw_rows.append(Row("discount" if amount < 0 else "other", label.strip(), amount))
+            if amount < 0 or in_discount_section:
+                discount_rows.append(Row("discount", label.strip(), amount))
+            else:
+                raw_items_with_qty.append((current_qty, Row("item", label.strip(), amount)))
             continue
-        if raw_rows:
-            raw_rows[-1].label = f"{raw_rows[-1].label} {line}".strip()
+        # Multiline text continuation
+        if raw_items_with_qty and not discount_rows:
+            last_qty, last_item = raw_items_with_qty[-1]
+            last_item.label = f"{last_item.label} {line}".strip()
+        elif discount_rows:
+            discount_rows[-1].label = f"{discount_rows[-1].label} {line}".strip()
 
-    # Group discounts by program/label and place them at the end of items
-    item_rows: list[Row] = []
+    # Group items by quantity (1x, 2x, 3x...)
+    qty_groups: dict[str, list[Row]] = {}
+    for q, item in raw_items_with_qty:
+        if q not in qty_groups:
+            qty_groups[q] = []
+        qty_groups[q].append(item)
+
+    def qty_sort_key(q: str) -> int:
+        m = re.search(r"\d+", q)
+        return int(m.group(0)) if m else 0
+
+    sorted_qtys = sorted(qty_groups.keys(), key=qty_sort_key, reverse=True)
+
+    organized_rows: list[Row] = []
+    for q in sorted_qtys:
+        organized_rows.append(Row(type="qty", label=q))
+        for item in qty_groups[q]:
+            organized_rows.append(item)
+
+    # Group discounts by label/program
     discount_map: dict[str, float] = {}
+    for d in discount_rows:
+        amt = d.amount or 0.0
+        if amt > 0:
+            amt = -amt
+        lbl = d.label.strip()
+        discount_map[lbl] = discount_map.get(lbl, 0.0) + amt
 
-    for r in raw_rows:
-        if r.type == "discount":
-            amt = r.amount or 0.0
-            if amt > 0:
-                amt = -amt
-            lbl = r.label.strip()
-            discount_map[lbl] = discount_map.get(lbl, 0.0) + amt
-        else:
-            item_rows.append(r)
-
-    discount_rows = [
+    consolidated_discounts = [
         Row(type="discount", label=lbl, amount=round(amt, 3))
         for lbl, amt in discount_map.items()
     ]
 
-    receipt.rows = item_rows + discount_rows
+    receipt.rows = organized_rows + consolidated_discounts
     return receipt
 
 

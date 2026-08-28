@@ -470,6 +470,14 @@
       padding: 12px 14px;
       border-top: 2px solid var(--line);
     }
+    .sheet .qty-head td {
+      background: var(--sub);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-bottom: 1px solid var(--line);
+    }
     .sheet .discount td {
       color: var(--red);
     }
@@ -857,32 +865,31 @@
 
       $('#meta').textContent = `Hiển thị ${rs.length}/${result.receipts.length} hoá đơn · Job #${jobId.slice(0, 8)}`;
 
-      let html = '<table class="sheet"><thead><tr><th>SL</th><th>Tên món / Diễn giải</th><th class="amount">Thành tiền</th></tr></thead><tbody>';
+      let html = '<table class="sheet"><thead><tr><th>Tên món / Diễn giải</th><th class="amount">Thành tiền</th></tr></thead><tbody>';
       rs.forEach(({ r, i }) => {
-        let total = 0, qty = '';
-        html += `<tr class="receipt-head" onclick="selectReceipt(${i})"><td colspan="3">${esc(r.display_name)} · xem PDF →</td></tr>`;
+        let total = 0;
+        html += `<tr class="receipt-head" onclick="selectReceipt(${i})"><td colspan="2">${esc(r.display_name)} · xem PDF →</td></tr>`;
         r.rows.forEach((x, row) => {
           if (x.type === 'qty') {
-            qty = x.label;
+            html += `<tr class="qty-head"><td colspan="2">${esc(x.label)}</td></tr>`;
             return;
           }
           total += x.amount || 0;
-          html += `<tr class="${x.type === 'discount' ? 'discount' : ''}"><td>${x.type === 'item' ? esc(qty) : ''}</td><td class="editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="label">${esc(x.label)}</td><td class="amount editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="amount">${money(x.amount)}</td></tr>`;
+          html += `<tr class="${x.type === 'discount' ? 'discount' : ''}"><td class="editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="label">${esc(x.label)}</td><td class="amount editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="amount">${money(x.amount)}</td></tr>`;
         });
-        html += `<tr class="total"><td colspan="2">Tổng</td><td class="amount">${money(total)}</td></tr>`;
+        html += `<tr class="total"><td>Tổng</td><td class="amount">${money(total)}</td></tr>`;
       });
       sheet.innerHTML = html + '</tbody></table>';
       sheet.querySelectorAll('[contenteditable]').forEach(e => e.addEventListener('blur', () => cellBlur(e)));
 
       cards.innerHTML = rs.map(({ r }) => {
-        let total = 0, qty = '';
+        let total = 0;
         const rows = r.rows.map(x => {
           if (x.type === 'qty') {
-            qty = x.label;
-            return `<div class="rrow qty">${esc(qty)}</div>`;
+            return `<div class="rrow qty">${esc(x.label)}</div>`;
           }
           total += x.amount || 0;
-          return `<div class="rrow ${x.type === 'discount' ? 'discount' : ''}"><span>${x.type === 'item' ? esc(qty) + ' × ' : ''}${esc(x.label)}</span><span class="amount">${money(x.amount)}</span></div>`;
+          return `<div class="rrow ${x.type === 'discount' ? 'discount' : ''}"><span>${esc(x.label)}</span><span class="amount">${money(x.amount)}</span></div>`;
         }).join('');
         return `<article class="receipt"><div class="rhead">${esc(r.display_name)}</div>${rows}<div class="rrow total"><span>Tổng đơn</span><span>${money(total)}</span></div></article>`;
       }).join('') || '<div class="empty">Không tìm thấy dữ liệu phù hợp.</div>';
