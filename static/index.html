@@ -857,34 +857,35 @@
       border-bottom: 1px solid var(--line);
       vertical-align: top;
     }
-    .sheet tr:hover td {
-      background: var(--hover);
-    }
     .sheet .receipt-head td {
-      background: var(--pink-bg);
-      color: var(--pink);
+      background: var(--sub);
+      color: var(--blue);
       font-weight: 700;
       cursor: pointer;
-      padding: 12px 16px;
+      padding: 10px 16px;
       border-top: 2px solid var(--line);
     }
-    .sheet .qty-head td {
-      background: var(--sub);
-      color: var(--muted);
-      font-weight: 800;
-      font-size: 12px;
-      padding: 7px 16px;
-      border-bottom: 1px solid var(--line);
-      letter-spacing: 0.05em;
+    .sheet .qty-row td {
+      font-weight: 700;
+      color: var(--text);
+      background: transparent;
+      padding: 8px 16px;
     }
     .sheet .discount td {
       color: var(--red);
     }
     .sheet .total td {
-      background: var(--amberbg);
+      background: #fbbf2433;
       font-weight: 800;
+      color: var(--text);
       border-top: 2px solid var(--amber);
-      padding: 12px 16px;
+      border-bottom: 2px solid var(--amber);
+      padding: 11px 16px;
+    }
+    [data-theme="light"] .sheet .total td {
+      background: #fef08a;
+      color: #000000;
+      border-bottom: 2px solid #000000;
     }
     .amount {
       text-align: right;
@@ -1326,29 +1327,9 @@
 
     <!-- MAIN WORKSPACE WITH RESIZABLE SPLITTER -->
     <section id="sheetView" class="workspace">
-      <!-- 3. PEEKING SHIBA BEHIND WORKSPACE PANEL -->
-      <div class="shiba-peeker" id="shibaPeeker" title="Gâu gâu! Shiba đang soi số liệu giùm bạn Hồ Cẩm Đào nè! 🐶">
-        <svg viewBox="0 0 50 50" width="100%" height="100%">
-          <polygon points="12,24 18,4 28,18" fill="#d97706"/>
-          <polygon points="15,20 19,8 25,17" fill="#fef3c7"/>
-          <polygon points="38,24 32,4 22,18" fill="#d97706"/>
-          <polygon points="35,20 31,8 25,17" fill="#fef3c7"/>
-          <ellipse cx="25" cy="28" rx="17" ry="14" fill="#f59e0b"/>
-          <ellipse cx="25" cy="31" rx="10" ry="8" fill="#ffffff"/>
-          <circle cx="18" cy="26" r="2.2" fill="#1c1917"/>
-          <circle cx="32" cy="26" r="2.2" fill="#1c1917"/>
-          <ellipse cx="17" cy="21" rx="2" ry="1.2" fill="#ffffff"/>
-          <ellipse cx="33" cy="21" rx="2" ry="1.2" fill="#ffffff"/>
-          <polygon points="25,30 23,28 27,28" fill="#1c1917"/>
-          <path d="M22,33 Q25,36 28,33" fill="none" stroke="#1c1917" stroke-width="1.6" stroke-linecap="round"/>
-          <ellipse cx="14" cy="40" rx="4" ry="3" fill="#ffffff"/>
-          <ellipse cx="36" cy="40" rx="4" ry="3" fill="#ffffff"/>
-        </svg>
-      </div>
-
       <div class="panel panel-left" id="excelPanel">
         <div class="panel-head">
-          <span>📝 Excel Workspace <small>· bấm vào ô bất kỳ để sửa</small></span>
+          <span>Excel Workspace <small>· bấm vào ô bất kỳ để sửa</small></span>
           <small id="editState">Đã đồng bộ</small>
         </div>
         <div class="sheet-wrap" id="sheet">
@@ -2003,10 +1984,10 @@
       let html = '<table class="sheet"><thead><tr><th>Tên món / Diễn giải</th><th class="amount" style="width:160px">Thành tiền</th></tr></thead><tbody>';
       rs.forEach(({ r, i }) => {
         let total = 0;
-        html += `<tr class="receipt-head" onclick="selectReceipt(${i})" title="Bấm để xem PDF gốc"><td colspan="2">🧾 ${esc(r.display_name)} <span style="font-size:11px;opacity:0.8">(Xem PDF →)</span></td></tr>`;
+        html += `<tr class="receipt-head" onclick="selectReceipt(${i})" title="Bấm để xem PDF gốc"><td><strong>${esc(r.display_name)}</strong></td><td style="text-align:right;font-size:11px;opacity:0.75;cursor:pointer;">xem PDF →</td></tr>`;
         r.rows.forEach((x, row) => {
           if (x.type === 'qty') {
-            html += `<tr class="qty-head"><td colspan="2">🐾 Số lượng: ${esc(x.label)}</td></tr>`;
+            html += `<tr class="qty-row"><td><strong>${esc(x.label)}</strong></td><td></td></tr>`;
             return;
           }
           total += x.amount || 0;
@@ -2019,10 +2000,10 @@
         });
         const matchBadge = (r.pdf_total !== null && r.pdf_total !== undefined)
           ? (Math.abs(Math.round(total) - Math.round(r.pdf_total)) <= 1
-              ? '<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--greenbg);color:var(--green);font-size:11px;margin-left:8px;font-weight:700;">✓ Khớp 100% PDF gốc</span>'
-              : `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--redbg);color:var(--red);font-size:11px;margin-left:8px;font-weight:700;">⚠ Lệch PDF gốc (${money(r.pdf_total)})</span>`)
+              ? '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:var(--greenbg);color:var(--green);font-size:11px;margin-left:8px;font-weight:700;">✓ Khớp 100% PDF gốc</span>'
+              : `<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:var(--redbg);color:var(--red);font-size:11px;margin-left:8px;font-weight:700;">⚠ Lệch PDF gốc (${money(r.pdf_total)})</span>`)
           : '';
-        html += `<tr class="total"><td>Tổng cộng ${matchBadge}</td><td class="amount">${money(total)}</td></tr>`;
+        html += `<tr class="total"><td><strong>Tổng</strong> ${matchBadge}</td><td class="amount"><strong>${money(total)}</strong></td></tr>`;
       });
       sheet.innerHTML = html + '</tbody></table>';
 
