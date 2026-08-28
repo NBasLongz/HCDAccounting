@@ -84,6 +84,160 @@
       max-width: 1440px;
       margin: auto;
       padding: 28px 24px 80px;
+      position: relative;
+    }
+
+    /* ================= CUTE CREATURE ANIMATIONS ================= */
+    /* 1. Hanging Friends Squad on Top Header (Cat + Panda + Chick) */
+    .hanging-squad {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      z-index: 40;
+    }
+    .hanging-animal {
+      transform-origin: top center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    }
+    .hanging-cat-box {
+      width: 52px;
+      height: 82px;
+      animation: cat-swing 3.2s ease-in-out infinite alternate;
+    }
+    .hanging-panda-box {
+      width: 50px;
+      height: 80px;
+      animation: panda-swing 2.8s ease-in-out infinite alternate-reverse 0.4s;
+    }
+    .perched-chick-box {
+      width: 44px;
+      height: 64px;
+      animation: chick-hop 2.2s ease-in-out infinite alternate;
+    }
+    .hanging-animal:hover {
+      animation-play-state: paused;
+      transform: scale(1.22) rotate(6deg);
+    }
+    @keyframes cat-swing {
+      0% { transform: rotate(-9deg); }
+      100% { transform: rotate(9deg); }
+    }
+    @keyframes panda-swing {
+      0% { transform: rotate(8deg); }
+      100% { transform: rotate(-8deg); }
+    }
+    @keyframes chick-hop {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(-5deg); }
+    }
+
+    /* 2. Family of 3 Running Ducklings on the Tab Divider */
+    .runner-track {
+      position: relative;
+      height: 38px;
+      margin-bottom: -16px;
+      pointer-events: none;
+      z-index: 15;
+    }
+    .duck-family {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      pointer-events: auto;
+      cursor: pointer;
+      animation: duck-patrol 18s linear infinite;
+    }
+    @keyframes duck-patrol {
+      0% { left: 0%; transform: scaleX(1) translateY(0); }
+      48% { left: calc(100% - 110px); transform: scaleX(1) translateY(0); }
+      50% { left: calc(100% - 110px); transform: scaleX(-1) translateY(0); }
+      98% { left: 0%; transform: scaleX(-1) translateY(0); }
+      100% { left: 0%; transform: scaleX(1) translateY(0); }
+    }
+    .duck-family:hover {
+      animation-play-state: paused;
+    }
+    .patrol-duck-mom {
+      width: 38px;
+      height: 38px;
+    }
+    .patrol-duck-baby1 {
+      width: 28px;
+      height: 28px;
+      animation: baby-bob 0.4s infinite alternate;
+    }
+    .patrol-duck-baby2 {
+      width: 22px;
+      height: 22px;
+      animation: baby-bob 0.35s infinite alternate 0.15s;
+    }
+    @keyframes baby-bob {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
+    }
+    .duck-feet {
+      transform-origin: center top;
+      animation: feet-waddle 0.22s infinite alternate;
+    }
+    @keyframes feet-waddle {
+      0% { transform: rotate(-22deg); }
+      100% { transform: rotate(22deg); }
+    }
+
+    /* 3. Peeking Shiba Behind Workspace Panel */
+    .shiba-peeker {
+      position: absolute;
+      top: -34px;
+      right: 28px;
+      width: 48px;
+      height: 40px;
+      z-index: 1;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: peeker-bob 6s ease-in-out infinite;
+    }
+    .shiba-peeker:hover {
+      transform: translateY(-16px) scale(1.15) !important;
+    }
+    @keyframes peeker-bob {
+      0%, 100% { transform: translateY(0); }
+      40% { transform: translateY(18px); }
+      55% { transform: translateY(18px); }
+      70% { transform: translateY(-10px); }
+    }
+
+    /* 4. Peeking Hamster Behind Search Bar */
+    .search-box-wrap {
+      position: relative;
+      display: inline-block;
+      width: min(340px, 100%);
+    }
+    .hamster-peeker {
+      position: absolute;
+      top: -24px;
+      right: 18px;
+      width: 32px;
+      height: 28px;
+      z-index: 0;
+      cursor: pointer;
+      animation: hamster-sniff 4s ease-in-out infinite;
+      transition: transform 0.2s;
+    }
+    .hamster-peeker:hover, .search-box-wrap:focus-within .hamster-peeker {
+      transform: translateY(-10px) scale(1.2);
+    }
+    @keyframes hamster-sniff {
+      0%, 100% { transform: translateY(2px); }
+      50% { transform: translateY(-7px) rotate(4deg); }
     }
 
     /* HEADER */
@@ -503,7 +657,8 @@
       display: flex;
       border-bottom: 2px solid var(--line);
       gap: 8px;
-      margin-top: 28px;
+      margin-top: 14px;
+      position: relative;
     }
     .tab {
       border: 0;
@@ -550,9 +705,11 @@
       font: 13px inherit;
       outline: none;
       transition: all .2s;
+      position: relative;
+      z-index: 2;
     }
     .toolbar input {
-      width: min(340px, 100%);
+      width: 100%;
     }
     .toolbar input:focus {
       border-color: var(--pink);
@@ -573,10 +730,11 @@
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 20px;
-      overflow: hidden;
+      overflow: visible;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      position: relative;
     }
     .panel-left {
       flex: 0 0 calc(52% - 9px);
@@ -657,7 +815,11 @@
       background: var(--sub);
       font-size: 13px;
       font-weight: 700;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
       flex-shrink: 0;
+      position: relative;
+      z-index: 2;
     }
     .panel-head small {
       color: var(--muted);
@@ -667,6 +829,8 @@
       overflow: auto;
       max-height: 720px;
       flex: 1 1 auto;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
     }
     .sheet {
       width: 100%;
@@ -743,6 +907,8 @@
       height: 720px;
       border: 0;
       background: #fff;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
       flex: 1 1 auto;
     }
 
@@ -913,6 +1079,7 @@
       .pdf-frame { height: 520px; }
       .desk-buddy { bottom: 15px; right: 15px; }
       .buddy-dialogue { max-width: 170px; font-size: 12px; }
+      .hanging-squad { display: none; }
     }
     @media(max-width:650px){
       .wrap { padding: 18px 14px 70px; }
@@ -928,6 +1095,77 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="wrap">
+    <!-- 1. HANGING CREATURES SQUAD ON TOP HEADER -->
+    <div class="hanging-squad" id="hangingSquad">
+      <!-- Cat Friend -->
+      <div class="hanging-animal hanging-cat-box" id="hangingCat" title="Miu Miu đang bám xà tập gym nè Hồ Cẩm Đào ơi! 🐱">
+        <svg viewBox="0 0 70 105" width="100%" height="100%">
+          <line x1="22" y1="0" x2="22" y2="20" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+          <line x1="48" y1="0" x2="48" y2="20" stroke="#f472b6" stroke-width="4" stroke-linecap="round"/>
+          <ellipse cx="22" cy="4" rx="5" ry="4" fill="#ec4899"/>
+          <ellipse cx="48" cy="4" rx="5" ry="4" fill="#ec4899"/>
+          <ellipse cx="35" cy="56" rx="22" ry="26" fill="#f472b6"/>
+          <ellipse cx="35" cy="59" rx="14" ry="18" fill="#ffffff"/>
+          <polygon points="18,43 12,30 25,35" fill="#f472b6"/>
+          <polygon points="17,41 14,32 22,36" fill="#fbcfe8"/>
+          <polygon points="52,43 58,30 45,35" fill="#f472b6"/>
+          <polygon points="53,41 56,32 48,36" fill="#fbcfe8"/>
+          <circle cx="27" cy="49" r="4.5" fill="#1e1e2f"/>
+          <circle cx="25.5" cy="47.5" r="1.6" fill="#ffffff"/>
+          <circle cx="43" cy="49" r="4.5" fill="#1e1e2f"/>
+          <circle cx="41.5" cy="47.5" r="1.6" fill="#ffffff"/>
+          <ellipse cx="20" cy="53" rx="4" ry="2.5" fill="#fb7185" opacity="0.8"/>
+          <ellipse cx="50" cy="53" rx="4" ry="2.5" fill="#fb7185" opacity="0.8"/>
+          <path d="M32,54 Q35,57 38,54" fill="none" stroke="#1e1e2f" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="anim-tail" d="M35,81 C33,93 45,97 42,91" fill="none" stroke="#f472b6" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Panda Friend -->
+      <div class="hanging-animal hanging-panda-box" id="hangingPanda" title="Gấu Trúc Bánh Bao cũng muốn tham gia đu xà! 🐼">
+        <svg viewBox="0 0 70 105" width="100%" height="100%">
+          <path d="M20,0 L20,30" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+          <path d="M50,0 L50,30" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+          <ellipse cx="20" cy="4" rx="5" ry="4" fill="#0f172a"/>
+          <ellipse cx="50" cy="4" rx="5" ry="4" fill="#0f172a"/>
+          <circle cx="16" cy="38" r="8" fill="#1e293b"/>
+          <circle cx="54" cy="38" r="8" fill="#1e293b"/>
+          <ellipse cx="35" cy="58" rx="23" ry="25" fill="#ffffff"/>
+          <path d="M14,54 C17,40 53,40 56,54" fill="none" stroke="#1e293b" stroke-width="9" stroke-linecap="round"/>
+          <ellipse cx="26" cy="52" rx="6" ry="7" fill="#1e293b" transform="rotate(-15 26 52)"/>
+          <ellipse cx="44" cy="52" rx="6" ry="7" fill="#1e293b" transform="rotate(15 44 52)"/>
+          <circle cx="26" cy="51" r="2.2" fill="#ffffff"/>
+          <circle cx="44" cy="51" r="2.2" fill="#ffffff"/>
+          <ellipse cx="35" cy="57" rx="3.5" ry="2.5" fill="#1e293b"/>
+          <ellipse cx="19" cy="57" rx="3.5" ry="2" fill="#fb7185" opacity="0.6"/>
+          <ellipse cx="51" cy="57" rx="3.5" ry="2" fill="#fb7185" opacity="0.6"/>
+          <path d="M32,61 Q35,64 38,61" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Chirpy Chick Friend -->
+      <div class="hanging-animal perched-chick-box" id="perchedChick" title="Gà Con Piyo đang cổ vũ nhiệt tình! 🐥">
+        <svg viewBox="0 0 50 85" width="100%" height="100%">
+          <line x1="25" y1="0" x2="25" y2="24" stroke="#f472b6" stroke-width="2.5" stroke-dasharray="3,2"/>
+          <polygon points="21,20 29,20 25,23" fill="#ec4899"/>
+          <polygon points="21,24 29,24 25,21" fill="#ec4899"/>
+          <ellipse cx="25" cy="56" rx="16" ry="18" fill="#fde047"/>
+          <circle cx="25" cy="40" r="13" fill="#fde047"/>
+          <polygon points="21,40 29,40 25,45" fill="#ea580c"/>
+          <circle cx="19" cy="37" r="2.2" fill="#1e1e2b"/>
+          <circle cx="31" cy="37" r="2.2" fill="#1e1e2b"/>
+          <circle cx="18" cy="36" r="0.8" fill="#ffffff"/>
+          <circle cx="30" cy="36" r="0.8" fill="#ffffff"/>
+          <circle cx="14" cy="41" r="2.5" fill="#f472b6" opacity="0.8"/>
+          <circle cx="36" cy="41" r="2.5" fill="#f472b6" opacity="0.8"/>
+          <ellipse cx="10" cy="54" rx="4" ry="7" fill="#eab308"/>
+          <ellipse cx="40" cy="54" rx="4" ry="7" fill="#eab308"/>
+          <ellipse cx="20" cy="74" rx="3" ry="1.5" fill="#ea580c"/>
+          <ellipse cx="30" cy="74" rx="3" ry="1.5" fill="#ea580c"/>
+        </svg>
+      </div>
+    </div>
+
     <!-- HEADER -->
     <header>
       <div class="brand">
@@ -961,23 +1199,18 @@
         <svg class="mascot-svg" id="dropMascot" viewBox="0 0 100 100">
           <path class="anim-tail" d="M30,68 C15,70 10,50 20,45" fill="none" stroke="#f472b6" stroke-width="6" stroke-linecap="round"/>
           <circle cx="50" cy="52" r="32" fill="#ec4899"/>
-          <!-- Ears -->
           <polygon class="anim-ear-l" points="26,30 36,8 48,26" fill="#ec4899"/>
           <polygon points="30,26 36,14 44,25" fill="#fbcfe8"/>
           <polygon class="anim-ear-r" points="52,26 64,8 74,30" fill="#ec4899"/>
           <polygon points="56,25 64,14 70,26" fill="#fbcfe8"/>
-          <!-- Eyes -->
           <ellipse class="anim-eye" id="mascotEyeL" cx="40" cy="46" rx="4" ry="5.5" fill="#ffffff"/>
           <ellipse class="anim-eye" id="mascotEyeR" cx="60" cy="46" rx="4" ry="5.5" fill="#ffffff"/>
           <circle cx="41" cy="45" r="2" fill="#1e1e2f"/>
           <circle cx="61" cy="45" r="2" fill="#1e1e2f"/>
-          <!-- Blush -->
           <circle cx="32" cy="54" r="4.5" fill="#fbcfe8" opacity="0.8"/>
           <circle cx="68" cy="54" r="4.5" fill="#fbcfe8" opacity="0.8"/>
-          <!-- Nose & Mouth -->
           <polygon points="50,51 47,48 53,48" fill="#fbcfe8"/>
           <path id="mascotMouth" d="M45,55 Q50,59 55,55" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Paws holding border -->
           <ellipse cx="38" cy="78" rx="7" ry="5" fill="#ffffff"/>
           <ellipse cx="62" cy="78" rx="7" ry="5" fill="#ffffff"/>
         </svg>
@@ -1004,6 +1237,60 @@
     <!-- STATS -->
     <section id="stats"></section>
 
+    <!-- 2. FLOCK OF 3 DUCKLINGS PARADE ACROSS TABS -->
+    <div class="runner-track">
+      <div class="duck-family" id="duckFamily" title="Gia đình 3 mẹ con nhà Vịt đang dẫn nhau đi tuần tra hoá đơn! 🦆🐥🐥">
+        <!-- Mom Duck -->
+        <div class="patrol-duck-mom">
+          <svg viewBox="0 0 50 50" width="100%" height="100%">
+            <ellipse cx="25" cy="30" rx="15" ry="12" fill="#facc15"/>
+            <circle cx="32" cy="20" r="10" fill="#facc15"/>
+            <path d="M40,20 Q48,22 40,26 Z" fill="#fb923c"/>
+            <circle cx="34" cy="18" r="2.2" fill="#1e1e2e"/>
+            <circle cx="33.3" cy="17.3" r="0.8" fill="#ffffff"/>
+            <ellipse cx="21" cy="30" rx="7" ry="5" fill="#eab308"/>
+            <g class="duck-feet">
+              <ellipse cx="20" cy="42" rx="4" ry="2" fill="#ea580c"/>
+              <ellipse cx="29" cy="42" rx="4" ry="2" fill="#ea580c"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Baby Duck 1 -->
+        <div class="patrol-duck-baby1">
+          <svg viewBox="0 0 50 50" width="100%" height="100%">
+            <ellipse cx="24" cy="32" rx="12" ry="9" fill="#fef08a"/>
+            <circle cx="30" cy="22" r="8" fill="#fef08a"/>
+            <path d="M37,22 Q43,24 37,27 Z" fill="#fb923c"/>
+            <circle cx="32" cy="20" r="1.8" fill="#1e1e2e"/>
+            <circle cx="31.5" cy="19.5" r="0.6" fill="#ffffff"/>
+            <circle cx="28" cy="24" r="2" fill="#fb7185" opacity="0.6"/>
+            <ellipse cx="20" cy="32" rx="5" ry="3.5" fill="#facc15"/>
+            <g class="duck-feet">
+              <ellipse cx="20" cy="41" rx="3" ry="1.5" fill="#ea580c"/>
+              <ellipse cx="27" cy="41" rx="3" ry="1.5" fill="#ea580c"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Baby Duck 2 (Tiny) -->
+        <div class="patrol-duck-baby2">
+          <svg viewBox="0 0 50 50" width="100%" height="100%">
+            <ellipse cx="24" cy="32" rx="10" ry="8" fill="#fef9c3"/>
+            <circle cx="29" cy="23" r="7" fill="#fef9c3"/>
+            <path d="M35,23 Q40,25 35,27 Z" fill="#fb923c"/>
+            <circle cx="30" cy="21" r="1.5" fill="#1e1e2e"/>
+            <circle cx="27" cy="25" r="1.8" fill="#fb7185" opacity="0.7"/>
+            <ellipse cx="20" cy="32" rx="4" ry="3" fill="#fde047"/>
+            <g class="duck-feet">
+              <ellipse cx="20" cy="40" rx="2.5" ry="1.2" fill="#ea580c"/>
+              <ellipse cx="26" cy="40" rx="2.5" ry="1.2" fill="#ea580c"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
     <!-- TABS -->
     <nav class="tabs">
       <button class="tab active" data-view="sheet">📊 Bảng Excel trực quan</button>
@@ -1013,11 +1300,52 @@
     <!-- TOOLBAR -->
     <div class="toolbar">
       <span class="meta" id="meta">🐾 Chưa có dữ liệu xử lý</span>
-      <input id="search" placeholder="🔍 Tìm mã đơn, tên món, giảm giá…">
+      
+      <!-- 4. PEEKING HAMSTER ON SEARCH BAR -->
+      <div class="search-box-wrap">
+        <div class="hamster-peeker" id="hamsterPeeker" title="Chít chít! Hamster ngửi thấy hạt hướng dương trong hoá đơn! 🐹🌻">
+          <svg viewBox="0 0 40 40" width="100%" height="100%">
+            <circle cx="12" cy="14" r="5" fill="#d97706"/>
+            <circle cx="12" cy="14" r="3" fill="#fde68a"/>
+            <circle cx="28" cy="14" r="5" fill="#d97706"/>
+            <circle cx="28" cy="14" r="3" fill="#fde68a"/>
+            <ellipse cx="20" cy="24" rx="14" ry="12" fill="#f59e0b"/>
+            <circle cx="15" cy="23" r="2" fill="#1e1e2e"/>
+            <circle cx="25" cy="23" r="2" fill="#1e1e2e"/>
+            <circle cx="11" cy="27" r="3.5" fill="#fb7185" opacity="0.6"/>
+            <circle cx="29" cy="27" r="3.5" fill="#fb7185" opacity="0.6"/>
+            <ellipse cx="20" cy="26" rx="2" ry="1.5" fill="#b45309"/>
+            <ellipse cx="14" cy="34" rx="3" ry="2.5" fill="#fef3c7"/>
+            <ellipse cx="26" cy="34" rx="3" ry="2.5" fill="#fef3c7"/>
+            <polygon points="20,29 17,35 23,35" fill="#451a03"/>
+          </svg>
+        </div>
+        <input id="search" placeholder="🔍 Tìm mã đơn, tên món, giảm giá…">
+      </div>
     </div>
 
     <!-- MAIN WORKSPACE WITH RESIZABLE SPLITTER -->
     <section id="sheetView" class="workspace">
+      <!-- 3. PEEKING SHIBA BEHIND WORKSPACE PANEL -->
+      <div class="shiba-peeker" id="shibaPeeker" title="Gâu gâu! Shiba đang soi số liệu giùm bạn Hồ Cẩm Đào nè! 🐶">
+        <svg viewBox="0 0 50 50" width="100%" height="100%">
+          <polygon points="12,24 18,4 28,18" fill="#d97706"/>
+          <polygon points="15,20 19,8 25,17" fill="#fef3c7"/>
+          <polygon points="38,24 32,4 22,18" fill="#d97706"/>
+          <polygon points="35,20 31,8 25,17" fill="#fef3c7"/>
+          <ellipse cx="25" cy="28" rx="17" ry="14" fill="#f59e0b"/>
+          <ellipse cx="25" cy="31" rx="10" ry="8" fill="#ffffff"/>
+          <circle cx="18" cy="26" r="2.2" fill="#1c1917"/>
+          <circle cx="32" cy="26" r="2.2" fill="#1c1917"/>
+          <ellipse cx="17" cy="21" rx="2" ry="1.2" fill="#ffffff"/>
+          <ellipse cx="33" cy="21" rx="2" ry="1.2" fill="#ffffff"/>
+          <polygon points="25,30 23,28 27,28" fill="#1c1917"/>
+          <path d="M22,33 Q25,36 28,33" fill="none" stroke="#1c1917" stroke-width="1.6" stroke-linecap="round"/>
+          <ellipse cx="14" cy="40" rx="4" ry="3" fill="#ffffff"/>
+          <ellipse cx="36" cy="40" rx="4" ry="3" fill="#ffffff"/>
+        </svg>
+      </div>
+
       <div class="panel panel-left" id="excelPanel">
         <div class="panel-head">
           <span>📝 Excel Workspace <small>· bấm vào ô bất kỳ để sửa</small></span>
@@ -1064,24 +1392,19 @@
       <svg id="buddyCharSvg" viewBox="0 0 100 100" style="width:100%;height:100%;">
         <path class="anim-tail" d="M25,70 C10,75 5,55 15,48" fill="none" stroke="#ec4899" stroke-width="7" stroke-linecap="round"/>
         <circle cx="50" cy="55" r="35" fill="#f472b6"/>
-        <!-- Ears -->
         <polygon class="anim-ear-l" points="22,30 32,5 45,25" fill="#f472b6"/>
         <polygon points="26,26 32,12 40,24" fill="#ffffff"/>
         <polygon class="anim-ear-r" points="55,25 68,5 78,30" fill="#f472b6"/>
         <polygon points="60,24 68,12 74,26" fill="#ffffff"/>
-        <!-- Eyes Cute -->
         <g id="buddyEyes">
           <circle class="anim-eye" cx="38" cy="48" r="5" fill="#1e1e2e"/>
           <circle cx="36" cy="46" r="1.8" fill="#ffffff"/>
           <circle class="anim-eye" cx="62" cy="48" r="5" fill="#1e1e2e"/>
           <circle cx="60" cy="46" r="1.8" fill="#ffffff"/>
         </g>
-        <!-- Blush -->
         <ellipse cx="28" cy="56" rx="5" ry="3" fill="#fb7185" opacity="0.7"/>
         <ellipse cx="72" cy="56" rx="5" ry="3" fill="#fb7185" opacity="0.7"/>
-        <!-- Mouth -->
         <path id="buddyMouth" d="M44,57 Q50,62 56,57" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Bell ribbon -->
         <rect x="35" y="76" width="30" height="6" rx="3" fill="#fbbf24"/>
         <circle cx="50" cy="80" r="4" fill="#f59e0b"/>
       </svg>
@@ -1130,6 +1453,14 @@
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
           osc.start(now);
           osc.stop(now + 0.3);
+        } else if (type === 'quack') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.12);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+          osc.start(now);
+          osc.stop(now + 0.14);
         } else if (type === 'pop') {
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(800, now);
@@ -1175,8 +1506,51 @@
     soundToggle.onclick = () => {
       soundEnabled = !soundEnabled;
       soundToggle.textContent = soundEnabled ? '🔔' : '🔕';
-      setMascotMood('excited', soundEnabled ? 'Đã bật âm thanh meow meow~ 🎶' : 'Đã tắt tiếng im ắng rồi Hồ Cẩm Đào nha 🤫');
+      setMascotMood('excited', soundEnabled ? 'Đã bật âm thanh meow meow~ 🎶' : 'Đã tắt tiếng im ắng rồi bạn Hồ Cẩm Đào nha 🤫');
       if (soundEnabled) playCuteSound('pop');
+    };
+
+    // INTERACTIVE CREATURE CLICK EVENTS
+    $('#hangingCat').onclick = (e) => {
+      e.stopPropagation();
+      playCuteSound('meow');
+      spawnFloatingHeart($('#hangingCat'), '🐱');
+      setMascotMood('excited', 'Miu Miu đang tập đu xà cùng hội bạn thân meow! 🐾');
+    };
+
+    $('#hangingPanda').onclick = (e) => {
+      e.stopPropagation();
+      playCuteSound('pop');
+      spawnFloatingHeart($('#hangingPanda'), '🐼');
+      setMascotMood('excited', 'Gấu Trúc Panda: "Đu xà mệt quá, xong việc cho tui xin cọng trúc nha bạn Hồ Cẩm Đào!" 🎋');
+    };
+
+    $('#perchedChick').onclick = (e) => {
+      e.stopPropagation();
+      playCuteSound('quack');
+      spawnFloatingHeart($('#perchedChick'), '🐥');
+      setMascotMood('excited', 'Gà con Piyo: "Chíp chíp chíp! Cố lên bạn Hồ Cẩm Đào ơi hoá đơn sắp xong rồi!" 🌸');
+    };
+
+    $('#duckFamily').onclick = (e) => {
+      e.stopPropagation();
+      playCuteSound('quack');
+      spawnFloatingHeart($('#duckFamily'), '🦆');
+      setMascotMood('excited', 'Đàn vịt 3 mẹ con đồng thanh: "Quác quác quác! Tất cả dữ liệu đều chuẩn 100 điểm!" 🐥🐥');
+    };
+
+    $('#shibaPeeker').onclick = (e) => {
+      e.stopPropagation();
+      playCuteSound('pop');
+      spawnFloatingHeart($('#shibaPeeker'), '🐶');
+      setMascotMood('excited', 'Shiba: "Gâu gâu! Em đang soi số liệu giúp bạn Hồ Cẩm Đào đó nhen!" 🦴');
+    };
+
+    $('#hamsterPeeker').onclick = (e) => {
+      e.stopPropagation();
+      playCuteSound('nom');
+      spawnFloatingHeart($('#hamsterPeeker'), '🐹');
+      setMascotMood('excited', 'Hamster: "Chít chít! Nhập chữ vào đây để tớ tìm món cho nha!" 🌻');
     };
 
     // MOUSE PAW & SPARKLE TRAIL
@@ -1193,7 +1567,7 @@
     function spawnPawParticle(x, y) {
       const p = document.createElement('div');
       p.className = 'paw-particle';
-      const items = ['🐾', '✨', '🌸', '💫'];
+      const items = ['🐾', '🌸', '💫'];
       p.textContent = items[Math.floor(Math.random() * items.length)];
       p.style.left = `${x - 10}px`;
       p.style.top = `${y - 10}px`;
@@ -1258,7 +1632,7 @@
       wakeMascot();
       playCuteSound('nom');
       spawnFloatingHeart(buddyChar, '🧋');
-      setMascotMood('excited', 'Trà sữa full topping trân châu đường đen 100 điểm cho bạn Hồ Cẩm Đào! ✨🥤');
+      setMascotMood('excited', 'Trà sữa full topping trân châu đường đen 100 điểm cho bạn Hồ Cẩm Đào! 🥤');
     };
 
     // PET SWITCHER
@@ -1331,17 +1705,17 @@
           <rect x="35" y="76" width="30" height="6" rx="3" fill="#fbbf24"/>
           <circle cx="50" cy="80" r="4" fill="#f59e0b"/>
         `;
-        setMascotMood('excited', 'Miu Miu đã trở lại quấn quýt bên bạn Hồ Cẩm Đào rồi meow~ 🐾✨');
+        setMascotMood('excited', 'Miu Miu đã trở lại quấn quýt bên bạn Hồ Cẩm Đào rồi meow~ 🐾');
       }
     }
 
     const cutePhrases = [
       "Hồ Cẩm Đào ơi làm ly trà sữa rồi tính tiếp nà! 🧋",
-      "Miu Miu quét số chuẩn 100% không lệch 1 xu meow~ ✨",
+      "Miu Miu quét số chuẩn 100% không lệch 1 xu meow~",
       "Vuốt ve tui nữa đi, đã quá meow meow~ (˶ᵔ ᵕ ᵔ˶)",
       "Đơn nào có giảm giá là Miu thích nhất á! 💸",
       "Kéo thả thêm nhiều hoá đơn nữa đi Hồ Cẩm Đào ơi! 🐾",
-      "Cố lên Hồ Cẩm Đào ơi, sắp xong việc về ngủ rồi! ฅ^•ﻌ•^ฅ",
+      "Cố lên Hồ Cẩm Đào ơi, sắp xong việc về nghỉ ngơi rồi! ฅ^•ﻌ•^ฅ",
       "Chu choa, bạn Hồ Cẩm Đào tính toán cừ khôi ghê ta! 🌟"
     ];
 
@@ -1379,7 +1753,7 @@
     function spawnFloatingHeart(target, emoji) {
       const rect = target.getBoundingClientRect();
       const el = document.createElement('div');
-      el.textContent = emoji || ['💖', '🐾', '✨', '🌸', '⭐', '😻'][Math.floor(Math.random()*6)];
+      el.textContent = emoji || ['💖', '🐾', '🌸', '⭐', '😻'][Math.floor(Math.random()*5)];
       el.style.cssText = `position:fixed;left:${rect.left + rect.width/2}px;top:${rect.top}px;font-size:22px;pointer-events:none;z-index:99999;transition:all 0.9s cubic-bezier(0.1, 1, 0.1, 1);transform:translate(-50%, 0);`;
       document.body.appendChild(el);
       setTimeout(() => {
@@ -1491,7 +1865,7 @@
     drop.addEventListener('drop', e => {
       playCuteSound('pop');
       add(e.dataTransfer.files);
-      setMascotMood('normal', 'Nhận file ngon lành gòi! Bấm chuyển đổi nha bạn Hồ Cẩm Đào ✨');
+      setMascotMood('normal', 'Nhận file ngon lành gòi! Bấm chuyển đổi nha bạn Hồ Cẩm Đào');
     });
 
     function add(list) {
@@ -1544,7 +1918,7 @@
         setMascotMood('excited', 'Woa biến hoá đơn thành Excel xong rồi nè! Đã đóng mộc ĐÃ DUYỆT 🐾');
       } catch (e) {
         notice.innerHTML = `<div class="notice">😿 Oimeoi: ${esc(e.message)}</div>`;
-        setMascotMood('normal', 'U là trời, file này hơi lạ hoặc lỗi kết nối rùi Hồ Cẩm Đào ơi (╥﹏╥)');
+        setMascotMood('normal', 'U là trời, file này hơi lạ hoặc lỗi kết nối rùi bạn Hồ Cẩm Đào ơi (╥﹏╥)');
       } finally {
         processBtn.disabled = false;
         processBtn.textContent = '🚀 Chuyển đổi hoá đơn ngay';
@@ -1624,7 +1998,7 @@
         </div>
       `;
 
-      $('#meta').textContent = `Hiển thị ${rs.length}/${result.receipts.length} hoá đơn · Mã Job #${String(jobId).slice(0, 8)} ✨`;
+      $('#meta').textContent = `Hiển thị ${rs.length}/${result.receipts.length} hoá đơn · Mã Job #${String(jobId).slice(0, 8)}`;
 
       let html = '<table class="sheet"><thead><tr><th>Tên món / Diễn giải</th><th class="amount" style="width:160px">Thành tiền</th></tr></thead><tbody>';
       rs.forEach(({ r, i }) => {
