@@ -553,32 +553,7 @@
       padding: 12px 15px;
       border-top: 1px dashed var(--line);
     }
-    .log {
-      margin-top: 36px;
-      background: #090e17;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .log h3 {
-      margin: 0;
-      padding: 10px 15px;
-      background: #0004;
-      color: var(--muted);
-      font: 12px "Roboto Mono", Consolas, monospace;
-      border-bottom: 1px solid var(--line);
-    }
-    .log pre {
-      padding: 14px;
-      margin: 0;
-      color: #aab9cc;
-      line-height: 1.7;
-      font: 12px "Roboto Mono", Consolas, monospace;
-      white-space: pre-wrap;
-    }
-    .log b {
-      color: var(--green);
-    }
+
     @media (max-width: 1080px) {
       .workspace {
         flex-direction: column;
@@ -701,11 +676,6 @@
     </section>
 
     <section id="receipts" class="cards" hidden></section>
-
-    <section class="log">
-      <h3>● CONSOLE OUTPUT / LOGS</h3>
-      <pre id="log">[system] Chờ người dùng tải file PDF…</pre>
-    </section>
   </main>
 
   <script>
@@ -722,7 +692,6 @@
     const cards = $('#receipts');
     const pdf = $('#pdf');
     const pdfSelect = $('#pdfSelect');
-    const log = $('#log');
     const search = $('#search');
     const splitter = $('#splitter');
     const workspace = $('#sheetView');
@@ -820,7 +789,6 @@
         setDirty(false);
         populatePdf();
         render();
-        log.innerHTML = data.logs.map((x, i) => `<b>[${String(i + 1).padStart(2, '0')}]</b> ${esc(x)}`).join('\n');
       } catch (e) {
         notice.innerHTML = `<div class="notice">⚠ ${esc(e.message)}</div>`;
       } finally {
@@ -934,7 +902,6 @@
         result = data;
         setDirty(false);
         render();
-        log.innerHTML = data.logs.map((x, i) => `<b>[${String(i + 1).padStart(2, '0')}]</b> ${esc(x)}`).join('\n');
       } catch (e) {
         notice.innerHTML = `<div class="notice">⚠ ${esc(e.message)}</div>`;
       } finally {
@@ -973,7 +940,6 @@
       saveBtn.disabled = true;
       $('#meta').textContent = 'Chưa có dữ liệu xử lý';
       notice.innerHTML = '';
-      log.textContent = '[system] Dữ liệu đã làm mới.';
     };
 
     // Resizable Splitter Logic
