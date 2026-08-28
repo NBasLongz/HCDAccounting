@@ -2017,7 +2017,12 @@
             </tr>
           `;
         });
-        html += `<tr class="total"><td>Tổng cộng</td><td class="amount">${money(total)}</td></tr>`;
+        const matchBadge = (r.pdf_total !== null && r.pdf_total !== undefined)
+          ? (Math.abs(Math.round(total) - Math.round(r.pdf_total)) <= 1
+              ? '<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--greenbg);color:var(--green);font-size:11px;margin-left:8px;font-weight:700;">✓ Khớp 100% PDF gốc</span>'
+              : `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--redbg);color:var(--red);font-size:11px;margin-left:8px;font-weight:700;">⚠ Lệch PDF gốc (${money(r.pdf_total)})</span>`)
+          : '';
+        html += `<tr class="total"><td>Tổng cộng ${matchBadge}</td><td class="amount">${money(total)}</td></tr>`;
       });
       sheet.innerHTML = html + '</tbody></table>';
 
