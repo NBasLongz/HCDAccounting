@@ -81,9 +81,10 @@
     }
 
     .wrap {
-      max-width: 1440px;
+      max-width: 1720px;
+      width: 96%;
       margin: auto;
-      padding: 28px 24px 80px;
+      padding: 24px 20px 80px;
       position: relative;
     }
 
@@ -737,8 +738,8 @@
       position: relative;
     }
     .panel-left {
-      flex: 0 0 calc(52% - 9px);
-      min-width: 300px;
+      flex: 0 0 calc(54% - 9px);
+      min-width: 320px;
       max-width: calc(100% - 300px);
     }
     .panel-right {
@@ -832,60 +833,203 @@
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
     }
-    .sheet {
-      width: 100%;
-      min-width: 580px;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .sheet th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: #0e1524;
-      color: var(--muted);
-      text-align: left;
-      font-weight: 700;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    [data-theme="light"] .sheet th {
-      background: #f1f5f9;
-    }
-    .sheet td {
+
+    /* EXCEL WORKSPACE TOPBAR */
+    .excel-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 10px 16px;
       border-bottom: 1px solid var(--line);
-      vertical-align: top;
+      background: var(--sub);
+      font-size: 13px;
+      font-weight: 600;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      position: relative;
+      z-index: 2;
     }
-    .sheet tr:hover td {
+    .excel-title {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .excel-fx-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .excel-fx-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--input);
+      border: 1px solid var(--line);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      color: var(--muted);
+      user-select: none;
+    }
+    .excel-fx-badge .fx-label {
+      font-style: italic;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .excel-fx-badge .fx-formula {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* EXCEL SPREADSHEET GRID */
+    .excel-grid {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 13px;
+      background: var(--card);
+    }
+    .excel-grid th, .excel-grid td {
+      border: 1px solid #ffffff14;
+    }
+    [data-theme="light"] .excel-grid th, [data-theme="light"] .excel-grid td {
+      border: 1px solid #e2e8f0;
+    }
+    .excel-grid th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #0f172a;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 7px 10px;
+      text-align: center;
+      user-select: none;
+      border-bottom: 2px solid var(--line);
+    }
+    [data-theme="light"] .excel-grid th {
+      background: #f1f5f9;
+      color: #64748b;
+      border-bottom: 2px solid #cbd5e1;
+    }
+    .excel-grid th.col-corner {
+      width: 44px;
+      min-width: 44px;
+      max-width: 44px;
+      border-right: 2px solid var(--line);
+    }
+    [data-theme="light"] .excel-grid th.col-corner {
+      border-right: 2px solid #cbd5e1;
+    }
+    .excel-grid th.col-a {
+      text-align: left;
+      padding-left: 14px;
+      position: relative;
+    }
+    .excel-grid th.col-b {
+      width: 160px;
+      min-width: 110px;
+      text-align: right;
+      padding-right: 14px;
+      position: relative;
+    }
+    .col-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 6px;
+      bottom: 0;
+      cursor: col-resize;
+      user-select: none;
+      z-index: 10;
+      transition: background 0.15s;
+    }
+    .col-resizer:hover, .col-resizer.active {
+      background: var(--blue);
+      width: 3px;
+    }
+    .excel-grid td.row-num {
+      width: 44px;
+      min-width: 44px;
+      max-width: 44px;
+      background: #0b1120;
+      color: #64748b;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      text-align: center;
+      padding: 6px 4px;
+      user-select: none;
+      font-weight: 500;
+      border-right: 2px solid var(--line);
+    }
+    [data-theme="light"] .excel-grid td.row-num {
+      background: #f8fafc;
+      color: #94a3b8;
+      border-right: 2px solid #cbd5e1;
+    }
+    .excel-grid td.cell-a {
+      padding: 6px 14px;
+      color: var(--text);
+      vertical-align: middle;
+    }
+    .excel-grid td.cell-b {
+      padding: 6px 14px;
+      text-align: right;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 13px;
+      vertical-align: middle;
+      white-space: nowrap;
+      color: var(--text);
+    }
+    .excel-grid tr:hover td.cell-a, .excel-grid tr:hover td.cell-b {
       background: var(--hover);
     }
-    .sheet .receipt-head td {
-      background: var(--pink-bg);
-      color: var(--pink);
+    .excel-grid tr.row-receipt td.cell-a {
       font-weight: 700;
       cursor: pointer;
-      padding: 12px 16px;
-      border-top: 2px solid var(--line);
+      color: var(--text);
     }
-    .sheet .qty-head td {
-      background: var(--sub);
-      color: var(--muted);
-      font-weight: 800;
-      font-size: 12px;
-      padding: 7px 16px;
-      border-bottom: 1px solid var(--line);
-      letter-spacing: 0.05em;
+    .excel-grid tr.row-receipt:hover td.cell-a {
+      color: var(--blue);
     }
-    .sheet .discount td {
+    .excel-grid tr.row-qty td.cell-a {
+      font-weight: 700;
+      color: var(--text);
+    }
+    .excel-grid tr.row-discount td.cell-a, .excel-grid tr.row-discount td.cell-b {
       color: var(--red);
     }
-    .sheet .total td {
-      background: var(--amberbg);
+    .excel-grid tr.row-total td.cell-a, .excel-grid tr.row-total td.cell-b {
+      background: #fbbf2430;
       font-weight: 800;
-      border-top: 2px solid var(--amber);
-      padding: 12px 16px;
+      color: var(--text);
+      border-top: 1px solid var(--amber);
+      border-bottom: 2px solid var(--amber);
     }
+    [data-theme="light"] .excel-grid tr.row-total td.cell-a, [data-theme="light"] .excel-grid tr.row-total td.cell-b {
+      background: #FFFF00;
+      color: #000000;
+      border-top: 1px solid #ca8a04;
+      border-bottom: 2px solid #000000;
+    }
+    .excel-grid .editable {
+      outline: none;
+      border-radius: 4px;
+      transition: background .15s;
+    }
+    .excel-grid .editable:focus {
+      outline: 2px solid var(--blue);
+      outline-offset: -1px;
+      background: var(--bluebg);
+    }
+
     .amount {
       text-align: right;
       font-family: 'JetBrains Mono', monospace;
@@ -904,12 +1048,14 @@
     }
     .pdf-frame {
       width: 100%;
-      height: 720px;
+      height: 100%;
+      min-height: 680px;
       border: 0;
-      background: #fff;
+      background: #ffffff;
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
       flex: 1 1 auto;
+      display: block;
     }
 
     /* EMPTY STATE CUTE */
@@ -1347,9 +1493,12 @@
       </div>
 
       <div class="panel panel-left" id="excelPanel">
-        <div class="panel-head">
-          <span>📝 Excel Workspace <small>· bấm vào ô bất kỳ để sửa</small></span>
-          <small id="editState">Đã đồng bộ</small>
+        <div class="panel-head excel-topbar">
+          <span id="excelFilename" class="excel-title">Receipts_HCDAccounting.xlsx — Sheet1</span>
+          <div class="excel-fx-group">
+            <div class="excel-fx-badge"><span class="fx-label">fx</span> <span class="fx-formula">=SUM(...)</span></div>
+            <small id="editState" style="font-size:11px;color:var(--muted);font-weight:600;">Đã đồng bộ</small>
+          </div>
         </div>
         <div class="sheet-wrap" id="sheet">
           <div class="empty">
@@ -1967,6 +2116,46 @@
       render();
     }
 
+    function initColumnResizers() {
+      sheet.querySelectorAll('.col-resizer').forEach(resizer => {
+        resizer.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const colType = resizer.dataset.col;
+          const th = colType === 'a' ? $('#colAHeader') : $('#colBHeader');
+          if (!th) return;
+
+          resizer.setPointerCapture(e.pointerId);
+          resizer.classList.add('active');
+          document.body.classList.add('resizing');
+
+          const startX = e.clientX;
+          const startWidth = th.offsetWidth;
+
+          const onPointerMove = (moveEv) => {
+            const delta = moveEv.clientX - startX;
+            const newWidth = Math.max(colType === 'a' ? 180 : 90, startWidth + delta);
+            th.style.width = newWidth + 'px';
+            if (colType === 'b') {
+              sheet.querySelectorAll('.col-b, .cell-b').forEach(el => el.style.width = newWidth + 'px');
+            }
+          };
+
+          const onPointerUp = (upEv) => {
+            try { resizer.releasePointerCapture(upEv.pointerId); } catch (_) {}
+            resizer.classList.remove('active');
+            document.body.classList.remove('resizing');
+            resizer.removeEventListener('pointermove', onPointerMove);
+            resizer.removeEventListener('pointerup', onPointerUp);
+            localStorage.setItem(`rf_col_${colType}_width`, th.style.width);
+          };
+
+          resizer.addEventListener('pointermove', onPointerMove);
+          resizer.addEventListener('pointerup', onPointerUp);
+        });
+      });
+    }
+
     function render() {
       if (!result) return;
       const q = search.value.trim().toLowerCase();
@@ -2000,32 +2189,69 @@
 
       $('#meta').textContent = `Hiển thị ${rs.length}/${result.receipts.length} hoá đơn · Mã Job #${String(jobId).slice(0, 8)}`;
 
-      let html = '<table class="sheet"><thead><tr><th>Tên món / Diễn giải</th><th class="amount" style="width:160px">Thành tiền</th></tr></thead><tbody>';
+      if (rs.length === 1) {
+        $('#excelFilename').textContent = `${rs[0].r.display_name.replace(/\.pdf$/i, '')}.xlsx — Sheet1`;
+      } else {
+        const jTag = jobId ? String(jobId).slice(0, 8) : Date.now();
+        $('#excelFilename').textContent = `Receipts_${jTag}.xlsx — Sheet1`;
+      }
+
+      const savedColAWidth = localStorage.getItem('rf_col_a_width');
+      const savedColBWidth = localStorage.getItem('rf_col_b_width');
+
+      let html = `<table class="excel-grid"><thead><tr><th class="col-corner"></th><th class="col-header col-a" id="colAHeader"${savedColAWidth ? ` style="width:${savedColAWidth}"` : ''}><span>A</span><div class="col-resizer" data-col="a" title="Kéo để chỉnh độ rộng cột A"></div></th><th class="col-header col-b" id="colBHeader"${savedColBWidth ? ` style="width:${savedColBWidth}"` : ''}><span>B</span><div class="col-resizer" data-col="b" title="Kéo để chỉnh độ rộng cột B"></div></th></tr></thead><tbody>`;
+      let rowNum = 1;
       rs.forEach(({ r, i }) => {
         let total = 0;
-        html += `<tr class="receipt-head" onclick="selectReceipt(${i})" title="Bấm để xem PDF gốc"><td colspan="2">🧾 ${esc(r.display_name)} <span style="font-size:11px;opacity:0.8">(Xem PDF →)</span></td></tr>`;
-        r.rows.forEach((x, row) => {
+        // 1. Receipt Header Row
+        html += `
+          <tr class="row-receipt" onclick="selectReceipt(${i})" title="Bấm để xem PDF gốc">
+            <td class="row-num">${rowNum++}</td>
+            <td class="cell-a"><strong>${esc(r.display_name)}</strong></td>
+            <td class="cell-b"></td>
+          </tr>
+        `;
+        // 2. Data Rows
+        r.rows.forEach((x, rowIdx) => {
           if (x.type === 'qty') {
-            html += `<tr class="qty-head"><td colspan="2">🐾 Số lượng: ${esc(x.label)}</td></tr>`;
+            html += `
+              <tr class="row-qty">
+                <td class="row-num">${rowNum++}</td>
+                <td class="cell-a"><strong>${esc(x.label)}</strong></td>
+                <td class="cell-b"></td>
+              </tr>
+            `;
             return;
           }
           total += x.amount || 0;
+          const isDisc = x.type === 'discount';
+          const amtStr = x.amount !== null && x.amount !== undefined ? (x.amount < 0 ? '-' : '') + Math.abs(Math.round(x.amount)).toLocaleString('vi-VN') : '';
           html += `
-            <tr class="${x.type === 'discount' ? 'discount' : ''}">
-              <td class="editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="label">${esc(x.label)}</td>
-              <td class="amount editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="amount">${money(x.amount)}</td>
+            <tr class="${isDisc ? 'row-discount' : 'row-item'}">
+              <td class="row-num">${rowNum++}</td>
+              <td class="cell-a editable" contenteditable="true" data-r="${i}" data-row="${rowIdx}" data-field="label">${esc(x.label)}</td>
+              <td class="cell-b amount editable" contenteditable="true" data-r="${i}" data-row="${rowIdx}" data-field="amount">${amtStr}</td>
             </tr>
           `;
         });
+        // 3. Total Row
+        const totalStr = (total < 0 ? '-' : '') + Math.abs(Math.round(total)).toLocaleString('vi-VN');
         const matchBadge = (r.pdf_total !== null && r.pdf_total !== undefined)
           ? (Math.abs(Math.round(total) - Math.round(r.pdf_total)) <= 1
-              ? '<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--greenbg);color:var(--green);font-size:11px;margin-left:8px;font-weight:700;">✓ Khớp 100% PDF gốc</span>'
-              : `<span style="display:inline-block;padding:2px 8px;border-radius:6px;background:var(--redbg);color:var(--red);font-size:11px;margin-left:8px;font-weight:700;">⚠ Lệch PDF gốc (${money(r.pdf_total)})</span>`)
+              ? '<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:var(--greenbg);color:var(--green);font-size:10px;margin-left:6px;font-weight:700;">✓ Khớp</span>'
+              : `<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:var(--redbg);color:var(--red);font-size:10px;margin-left:6px;font-weight:700;">⚠ Lệch (${(r.pdf_total < 0 ? '-' : '') + Math.abs(Math.round(r.pdf_total)).toLocaleString('vi-VN')})</span>`)
           : '';
-        html += `<tr class="total"><td>Tổng cộng ${matchBadge}</td><td class="amount">${money(total)}</td></tr>`;
+        html += `
+          <tr class="row-total">
+            <td class="row-num">${rowNum++}</td>
+            <td class="cell-a"><strong>Tổng</strong> ${matchBadge}</td>
+            <td class="cell-b amount"><strong>${totalStr}</strong></td>
+          </tr>
+        `;
       });
       sheet.innerHTML = html + '</tbody></table>';
 
+      initColumnResizers();
       sheet.querySelectorAll('[contenteditable]').forEach(e => e.addEventListener('blur', () => cellBlur(e)));
 
       cards.innerHTML = rs.map(({ r }) => {

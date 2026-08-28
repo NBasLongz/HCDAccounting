@@ -32,7 +32,7 @@ def export(receipts: list[Receipt], output_path: str, sheet_title: str = "HoÃ¡ Ä
         for row in receipt.rows:
             if row.type == "qty":
                 qty_cell = ws.cell(current_row, 1, row.label)
-                qty_cell.font = ITEM_FONT
+                qty_cell.font = BOLD
                 current_row += 1
                 continue
 
