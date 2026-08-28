@@ -984,7 +984,7 @@
       </div>
       <strong>Thả file PDF hoá đơn vào đây nè Hồ Cẩm Đào ơi! ฅ^•ﻌ•^ฅ</strong>
       <p>hoặc bấm vào đây để chọn nhiều file từ máy tính</p>
-      <span class="drop-tag">✨ Nhận diện tự động VAT, chiết khấu, từng món</span>
+      <span class="drop-tag">Nhận diện tự động VAT, chiết khấu, từng món</span>
       <input id="input" type="file" accept="application/pdf" multiple>
     </section>
 
@@ -995,7 +995,7 @@
     <div class="actions">
       <button class="btn primary" id="process" disabled>🚀 Chuyển đổi hoá đơn ngay</button>
       <button class="btn" id="save" disabled>💾 Lưu thay đổi</button>
-      <button class="btn success" id="download" hidden>✨ Xuất file Excel (.xlsx)</button>
+      <button class="btn success" id="download" hidden>Xuất file Excel (.xlsx)</button>
       <button class="btn" id="reset">↻ Làm mới (Reset)</button>
     </div>
 
@@ -1021,7 +1021,7 @@
       <div class="panel panel-left" id="excelPanel">
         <div class="panel-head">
           <span>📝 Excel Workspace <small>· bấm vào ô bất kỳ để sửa</small></span>
-          <small id="editState">Đã đồng bộ ✨</small>
+          <small id="editState">Đã đồng bộ</small>
         </div>
         <div class="sheet-wrap" id="sheet">
           <div class="empty">
@@ -1239,7 +1239,7 @@
         <circle class="anim-eye" cx="62" cy="48" r="5" fill="#1e1e2e"/>
         <circle cx="60" cy="46" r="1.8" fill="#ffffff"/>
       `;
-      setMascotMood('excited', 'Ú oà! Miu tỉnh rồi nè, tiếp tục quẩy hoá đơn thôi Hồ Cẩm Đào ơi! 🐾✨');
+      setMascotMood('excited', 'Ú oà! Miu tỉnh rồi nè, tiếp tục quẩy hoá đơn thôi Hồ Cẩm Đào ơi! 🐾');
       playCuteSound('pop');
     }
     resetIdleTimer();
@@ -1457,7 +1457,7 @@
     function setDirty(v = true) {
       dirty = v;
       saveBtn.disabled = !result || !dirty;
-      $('#editState').textContent = dirty ? '⚠ Chưa lưu thay đổi' : 'Đã đồng bộ ✨';
+      $('#editState').textContent = dirty ? '⚠ Chưa lưu thay đổi' : 'Đã đồng bộ';
     }
 
     // THEME TOGGLE
@@ -1643,7 +1643,7 @@
             </tr>
           `;
         });
-        html += `<tr class="total"><td>✨ Tổng cộng</td><td class="amount">${money(total)}</td></tr>`;
+        html += `<tr class="total"><td>Tổng cộng</td><td class="amount">${money(total)}</td></tr>`;
       });
       sheet.innerHTML = html + '</tbody></table>';
 
@@ -1683,7 +1683,7 @@
         setDirty(false);
         render();
         playCuteSound('success');
-        setMascotMood('excited', 'Đã lưu mọi chỉnh sửa an toàn vào kho dữ liệu meow! 💾✨');
+        setMascotMood('excited', 'Đã lưu mọi chỉnh sửa an toàn vào kho dữ liệu meow! 💾');
       } catch (e) {
         notice.innerHTML = `<div class="notice">⚠ ${esc(e.message)}</div>`;
       } finally {
