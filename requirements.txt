@@ -1,0 +1,9 @@
+# Windows App Control may block charset-normalizer's optional .pyd accelerator.
+# Install its pure-Python implementation, used indirectly by pdfminer.six.
+--no-binary=charset-normalizer
+charset-normalizer>=3.3,<4
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+pdfplumber>=0.11
+openpyxl>=3.1
