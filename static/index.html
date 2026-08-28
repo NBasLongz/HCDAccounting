@@ -3,103 +3,144 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HCDAccounting — PDF to Excel Pro</title>
+  <title>HCDAccounting — PDF to Excel Cực Dễ Thương 🐾</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #090d16;
-      --card: #121a2be6;
-      --sub: #121d30;
-      --hover: #19263e;
-      --input: #0e1726;
+      --bg: #0c101d;
+      --card: #151d30e6;
+      --sub: #162238;
+      --hover: #1e2e4c;
+      --input: #0f1828;
       --line: #ffffff18;
       --text: #f1f5f9;
       --muted: #94a3b8;
       --faint: #64748b;
-      --blue: #3b82f6;
-      --bluebg: #3b82f633;
-      --green: #10b981;
-      --greenbg: #10b98120;
-      --red: #f43f5e;
-      --redbg: #f43f5e20;
-      --amber: #f59e0b;
-      --amberbg: #f59e0b25;
-      --shadow: 0 12px 32px -4px #0008;
+      --pink: #f472b6;
+      --pink-bg: #f472b622;
+      --blue: #38bdf8;
+      --bluebg: #38bdf826;
+      --green: #34d399;
+      --greenbg: #34d39922;
+      --red: #fb7185;
+      --redbg: #fb718520;
+      --amber: #fbbf24;
+      --amberbg: #fbbf2425;
+      --shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.45);
+      --bubble-bg: #1e293b;
     }
+
     [data-theme="light"] {
-      --bg: #f8fafc;
-      --card: #fffffff0;
+      --bg: #fbfbfe;
+      --card: #fffffffa;
       --sub: #f1f5f9;
-      --hover: #e8f0fb;
-      --input: #fff;
-      --line: #00000015;
-      --text: #0f172a;
+      --hover: #eff6ff;
+      --input: #ffffff;
+      --line: #00000012;
+      --text: #1e293b;
       --muted: #64748b;
       --faint: #94a3b8;
-      --blue: #2563eb;
-      --bluebg: #2563eb14;
+      --pink: #ec4899;
+      --pink-bg: #fdf2f8;
+      --blue: #0284c7;
+      --bluebg: #e0f2fe;
       --green: #059669;
-      --greenbg: #05966915;
+      --greenbg: #ecfdf5;
       --red: #e11d48;
-      --redbg: #e11d4812;
+      --redbg: #fff1f2;
       --amber: #d97706;
-      --amberbg: #d9770618;
-      --shadow: 0 12px 28px -4px #0002;
+      --amberbg: #fef3c7;
+      --shadow: 0 16px 32px -8px rgba(100, 116, 139, 0.18);
+      --bubble-bg: #ffffff;
     }
-    * {
-      box-sizing: border-box;
-    }
-    [hidden] {
-      display: none !important;
-    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: radial-gradient(at 0 0, #3b82f619, transparent 42%), radial-gradient(at 100% 100%, #7c3aed15, transparent 42%), var(--bg);
+      background: 
+        radial-gradient(circle at 10% 15%, #f472b618, transparent 38%),
+        radial-gradient(circle at 90% 85%, #38bdf818, transparent 42%),
+        radial-gradient(circle at 50% 50%, #a855f710, transparent 50%),
+        var(--bg);
       color: var(--text);
-      font: 14px Inter, "Segoe UI", Arial, sans-serif;
+      font: 14px 'Plus Jakarta Sans', system-ui, sans-serif;
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23f472b6'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>"), auto;
     }
+
+    .paw-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      user-select: none;
+      transition: transform 0.8s cubic-bezier(0.1, 1, 0.1, 1), opacity 0.8s ease-out;
+    }
+
     .wrap {
-      max-width: 1600px;
+      max-width: 1440px;
       margin: auto;
-      padding: 32px 32px 70px;
+      padding: 28px 24px 80px;
     }
+
+    /* HEADER */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      margin-bottom: 28px;
+      margin-bottom: 22px;
     }
     .brand {
       display: flex;
       align-items: center;
       gap: 14px;
     }
+    .logo-box {
+      position: relative;
+    }
     .logo {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      box-shadow: 0 8px 18px #3b82f644;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
+      box-shadow: 0 8px 20px #ec489944;
       color: #fff;
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      font-size: 24px;
+      animation: gentle-wobble 4s ease-in-out infinite;
+      cursor: pointer;
+      user-select: none;
+    }
+    .logo-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      font-size: 13px;
+      animation: bounce 1.8s infinite;
     }
     .brand h1 {
-      font-size: 20px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 22px;
       margin: 0;
       font-weight: 800;
+      background: linear-gradient(90deg, var(--text), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .brand p {
       color: var(--muted);
-      font-size: 12px;
-      margin: 2px 0;
+      font-size: 13px;
+      margin: 2px 0 0;
     }
+
     .controls {
       display: flex;
       align-items: center;
@@ -111,224 +152,414 @@
       align-items: center;
       color: var(--green);
       background: var(--greenbg);
-      border: 1px solid #10b98133;
-      padding: 7px 13px;
+      border: 1px solid #34d39944;
+      padding: 7px 15px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #34d39915;
     }
     .dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: currentColor;
-      box-shadow: 0 0 8px currentColor;
+      box-shadow: 0 0 10px currentColor;
+      animation: pulse 1.5s infinite;
     }
-    .theme {
-      height: 36px;
-      width: 38px;
+    .theme, .sound-btn {
+      height: 38px;
+      width: 40px;
       border: 1px solid var(--line);
       background: var(--card);
-      border-radius: 10px;
+      border-radius: 12px;
       color: var(--muted);
       cursor: pointer;
-    }
-    .drop {
-      background: var(--card);
-      border: 2px dashed var(--line);
-      border-radius: 20px;
-      padding: 38px 20px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 1px 2px #0003;
-    }
-    .drop:hover, .drop.drag {
-      border-color: var(--blue);
-      background: var(--hover);
-      box-shadow: 0 0 24px #3b82f640;
-    }
-    .drop input {
-      display: none;
-    }
-    .drop-icon {
+      font-size: 16px;
+      transition: all .2s cubic-bezier(0.34, 1.56, 0.64, 1);
       display: grid;
       place-items: center;
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 14px;
-      background: var(--bluebg);
-      color: var(--blue);
-      border-radius: 16px;
-      font-size: 27px;
     }
+    .theme:hover, .sound-btn:hover {
+      transform: scale(1.1) rotate(8deg);
+      color: var(--pink);
+      border-color: var(--pink);
+    }
+
+    /* PET PICKER BAR */
+    .pet-picker-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: var(--card);
+      padding: 8px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      width: fit-content;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .pet-btn {
+      border: 1px solid var(--line);
+      background: var(--sub);
+      color: var(--text);
+      padding: 5px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all .2s;
+    }
+    .pet-btn.active {
+      background: var(--pink);
+      color: #fff;
+      border-color: var(--pink);
+      box-shadow: 0 4px 12px #f472b640;
+    }
+
+    /* DROP AREA WITH CUTIE MASCOT */
+    .drop {
+      position: relative;
+      background: var(--card);
+      border: 2px dashed var(--line);
+      border-radius: 24px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+    .drop:hover, .drop.drag {
+      border-color: var(--pink);
+      background: var(--hover);
+      box-shadow: 0 0 30px #ec489930;
+      transform: translateY(-2px) scale(1.008);
+    }
+    .drop input { display: none; }
+
+    .drop-mascot-box {
+      width: 100px;
+      height: 90px;
+      margin: 0 auto 10px;
+      position: relative;
+    }
+    .mascot-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+      transition: transform 0.3s ease;
+    }
+    .drop:hover .mascot-svg {
+      transform: scale(1.08) translateY(-4px);
+    }
+
     .drop strong {
       display: block;
-      font-size: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
     }
     .drop p {
       margin: 6px;
       color: var(--muted);
       font-size: 13px;
     }
+    .drop-tag {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: var(--pink-bg);
+      color: var(--pink);
+      border: 1px solid var(--pink);
+    }
+
+    /* STAMP EFFECT */
+    .stamp-badge {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      border: 2px dashed #10b981;
+      color: #10b981;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      transform: rotate(12deg) scale(0);
+      animation: stamp-drop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      pointer-events: none;
+      background: #10b98115;
+    }
+
+    @keyframes stamp-drop {
+      0% { transform: rotate(12deg) scale(2.5); opacity: 0; }
+      100% { transform: rotate(12deg) scale(1); opacity: 1; }
+    }
+
+    /* SLEEPING ZZZ ANIMATION */
+    .zzz-bubble {
+      position: absolute;
+      top: -15px;
+      right: 10px;
+      font-weight: 800;
+      color: var(--pink);
+      font-size: 14px;
+      animation: zzz-float 2.5s infinite;
+      opacity: 0;
+    }
+    @keyframes zzz-float {
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-25px) translateX(10px) scale(1.3); opacity: 0; }
+    }
+
+    /* MASCOT FEEDER BAR */
+    .feeder-bar {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .feed-btn {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all .2s;
+    }
+    .feed-btn:hover {
+      background: var(--pink-bg);
+      border-color: var(--pink);
+      transform: scale(1.08);
+    }
+
+    /* FILES LIST */
     .files {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 10px;
-      margin-top: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
     }
     .file {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      padding: 10px 13px;
+      padding: 12px 16px;
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .file-name {
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-weight: 600;
     }
     .file small {
       display: block;
       color: var(--faint);
       margin-top: 2px;
+      font-weight: 400;
     }
     .remove {
       border: 0;
       background: none;
       color: var(--muted);
       cursor: pointer;
-      font-size: 20px;
+      font-size: 18px;
+      padding: 4px;
+      border-radius: 8px;
+      transition: all .2s;
     }
     .remove:hover {
       color: var(--red);
+      background: var(--redbg);
+      transform: scale(1.15) rotate(90deg);
     }
+
+    /* ACTION BUTTONS */
     .actions {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
       margin: 22px 0 10px;
     }
     .btn {
       border: 1px solid var(--line);
-      border-radius: 11px;
-      padding: 10px 16px;
+      border-radius: 14px;
+      padding: 11px 20px;
       background: var(--card);
       color: var(--text);
-      font: 600 13px inherit;
+      font: 700 13px 'Quicksand', sans-serif;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .btn:hover:not(:disabled) {
+      transform: translateY(-2.5px) scale(1.02);
+      border-color: var(--pink);
       background: var(--hover);
-      border-color: var(--muted);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(0) scale(0.97);
     }
     .btn.primary {
       border: 0;
       color: #fff;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      box-shadow: 0 4px 14px #3b82f640;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      box-shadow: 0 6px 20px #ec489944;
+    }
+    .btn.primary:hover:not(:disabled) {
+      box-shadow: 0 8px 25px #ec489966;
     }
     .btn.success {
       border: 0;
       color: #fff;
       background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 6px 18px #10b98144;
     }
     .btn:disabled {
       opacity: .45;
       cursor: not-allowed;
+      transform: none !important;
     }
+
     .notice {
       margin: 14px 0;
       background: var(--redbg);
-      border: 1px solid #f43f5e33;
+      border: 1px solid #fb718544;
       color: var(--red);
-      border-radius: 11px;
-      padding: 12px 15px;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-weight: 600;
+      animation: shake 0.4s ease;
     }
+
+    /* STATS CARDS */
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 13px;
-      margin: 25px 0;
+      gap: 14px;
+      margin: 24px 0;
     }
     .stat {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 16px 18px;
-      box-shadow: 0 1px 2px #0002;
+      border-radius: 18px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease;
+    }
+    .stat:hover {
+      transform: translateY(-3px);
+    }
+    .stat-icon {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      font-size: 24px;
+      opacity: 0.6;
     }
     .stat small {
       display: block;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       font-size: 11px;
-      letter-spacing: .04em;
+      letter-spacing: .06em;
     }
     .stat strong {
       display: block;
       margin-top: 10px;
-      font-size: 22px;
+      font-size: 23px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 800;
     }
-    .green {
-      color: var(--green);
-    }
-    .red {
-      color: var(--red);
-    }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+
+    /* TABS */
     .tabs {
       display: flex;
-      border-bottom: 1px solid var(--line);
-      gap: 6px;
+      border-bottom: 2px solid var(--line);
+      gap: 8px;
       margin-top: 28px;
     }
     .tab {
       border: 0;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
       background: none;
       color: var(--muted);
-      padding: 12px 16px;
-      font: 600 13px inherit;
+      padding: 12px 20px;
+      font: 700 13px 'Quicksand', sans-serif;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s;
+    }
+    .tab:hover {
+      color: var(--text);
     }
     .tab.active {
-      color: var(--blue);
-      border-bottom-color: var(--blue);
+      color: var(--pink);
+      border-bottom-color: var(--pink);
     }
+
+    /* TOOLBAR */
     .toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
-      margin: 20px 0 16px;
+      margin: 18px 0;
       flex-wrap: wrap;
     }
     .meta {
       color: var(--muted);
       font-size: 13px;
+      font-weight: 600;
     }
     .toolbar input, .pdf-select {
       background: var(--input);
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 12px;
       color: var(--text);
-      padding: 10px 12px;
+      padding: 10px 14px;
       font: 13px inherit;
       outline: none;
+      transition: all .2s;
     }
     .toolbar input {
       width: min(340px, 100%);
     }
     .toolbar input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px var(--bluebg);
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px var(--pink-bg);
     }
+
+    /* WORKSPACE RESIZABLE SPLIT PANELS */
     .workspace {
       display: flex;
       flex-direction: row;
@@ -341,22 +572,23 @@
     .panel {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
     }
     .panel-left {
-      flex: 0 0 calc(50% - 9px);
+      flex: 0 0 calc(52% - 9px);
       min-width: 300px;
       max-width: calc(100% - 300px);
     }
     .panel-right {
-      flex: 1 1 0;
+      flex: 1 1 0%;
       min-width: 300px;
       max-width: calc(100% - 300px);
     }
+
     .workspace-splitter {
       width: 18px;
       display: flex;
@@ -380,8 +612,8 @@
       transition: background 0.2s, width 0.2s, box-shadow 0.2s;
     }
     .splitter-handle {
-      width: 14px;
-      height: 34px;
+      width: 16px;
+      height: 36px;
       background: var(--sub);
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -389,22 +621,23 @@
       place-items: center;
       color: var(--muted);
       z-index: 2;
-      box-shadow: 0 2px 6px #0004;
-      transition: background 0.2s, color 0.2s, transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      transition: all 0.2s ease;
+      font-size: 10px;
     }
     .workspace-splitter:hover .splitter-line,
     .workspace-splitter.dragging .splitter-line {
-      background: var(--blue);
+      background: var(--pink);
       width: 3px;
-      box-shadow: 0 0 10px var(--blue);
+      box-shadow: 0 0 12px var(--pink);
     }
     .workspace-splitter:hover .splitter-handle,
     .workspace-splitter.dragging .splitter-handle {
-      background: var(--blue);
+      background: var(--pink);
       color: #fff;
-      border-color: var(--blue);
+      border-color: var(--pink);
       transform: scale(1.15);
-      box-shadow: 0 0 12px var(--blue);
+      box-shadow: 0 0 14px var(--pink);
     }
     body.resizing {
       cursor: col-resize !important;
@@ -413,12 +646,13 @@
     body.resizing iframe {
       pointer-events: none !important;
     }
+
     .panel-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      padding: 12px 14px;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--line);
       background: var(--sub);
       font-size: 13px;
@@ -431,12 +665,12 @@
     }
     .sheet-wrap {
       overflow: auto;
-      max-height: 740px;
+      max-height: 720px;
       flex: 1 1 auto;
     }
     .sheet {
       width: 100%;
-      min-width: 630px;
+      min-width: 580px;
       border-collapse: collapse;
       font-size: 13px;
     }
@@ -444,18 +678,18 @@
       position: sticky;
       top: 0;
       z-index: 2;
-      background: #0d1624;
+      background: #0e1524;
       color: var(--muted);
       text-align: left;
-      font-weight: 600;
-      padding: 11px 14px;
+      font-weight: 700;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--line);
     }
     [data-theme="light"] .sheet th {
-      background: #f8fafc;
+      background: #f1f5f9;
     }
     .sheet td {
-      padding: 9px 14px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--line);
       vertical-align: top;
     }
@@ -463,20 +697,21 @@
       background: var(--hover);
     }
     .sheet .receipt-head td {
-      background: var(--bluebg);
-      color: var(--blue);
+      background: var(--pink-bg);
+      color: var(--pink);
       font-weight: 700;
       cursor: pointer;
-      padding: 12px 14px;
+      padding: 12px 16px;
       border-top: 2px solid var(--line);
     }
     .sheet .qty-head td {
       background: var(--sub);
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 12px;
-      padding: 6px 14px;
+      padding: 7px 16px;
       border-bottom: 1px solid var(--line);
+      letter-spacing: 0.05em;
     }
     .sheet .discount td {
       color: var(--red);
@@ -485,40 +720,45 @@
       background: var(--amberbg);
       font-weight: 800;
       border-top: 2px solid var(--amber);
-      padding: 12px 14px;
+      padding: 12px 16px;
     }
     .amount {
       text-align: right;
-      font-family: "Roboto Mono", Consolas, monospace;
+      font-family: 'JetBrains Mono', monospace;
       white-space: nowrap;
     }
     .editable {
       outline: none;
-      border-radius: 4px;
+      border-radius: 6px;
+      transition: background .15s;
     }
     .editable:focus {
-      background: var(--bluebg);
-      box-shadow: 0 0 0 2px var(--blue);
-      padding: 2px 4px;
-      margin: -2px -4px;
-    }
-    .hint {
-      font-size: 11px;
-      color: var(--faint);
-      font-weight: 500;
+      background: var(--pink-bg);
+      box-shadow: 0 0 0 2px var(--pink);
+      padding: 3px 6px;
+      margin: -3px -6px;
     }
     .pdf-frame {
       width: 100%;
-      height: 740px;
+      height: 720px;
       border: 0;
       background: #fff;
       flex: 1 1 auto;
     }
+
+    /* EMPTY STATE CUTE */
     .empty {
-      padding: 45px 20px;
+      padding: 50px 20px;
       text-align: center;
       color: var(--muted);
     }
+    .empty-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
@@ -528,157 +768,281 @@
     .receipt {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      transition: transform .2s;
+    }
+    .receipt:hover {
+      transform: translateY(-3px);
     }
     .rhead {
-      padding: 12px 15px;
-      background: var(--bluebg);
-      color: var(--blue);
+      padding: 14px 18px;
+      background: var(--pink-bg);
+      color: var(--pink);
       font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .rrow {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      padding: 8px 15px;
+      padding: 10px 18px;
     }
     .rrow.qty {
       background: var(--sub);
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 12px;
     }
-    .rrow.discount {
-      color: var(--red);
-    }
+    .rrow.discount { color: var(--red); }
     .rrow.total {
       background: var(--amberbg);
       font-weight: 800;
       margin-top: auto;
-      padding: 12px 15px;
+      padding: 12px 18px;
       border-top: 1px dashed var(--line);
     }
 
-    @media (max-width: 1080px) {
-      .workspace {
-        flex-direction: column;
-        gap: 20px;
-        margin-bottom: 28px;
-      }
-      .panel-left, .panel-right {
-        flex: 1 1 auto !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-      }
-      .workspace-splitter {
-        display: none;
-      }
-      .pdf-frame {
-        height: 680px;
-      }
+    /* FLOATING CUTE DESK BUDDY MASCOT (Góc phải dưới) */
+    .desk-buddy {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      user-select: none;
     }
-    @media (max-width: 650px) {
-      .wrap {
-        padding: 20px 14px 50px;
-      }
-      header {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-      .controls {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .actions .btn {
-        flex: 1;
-      }
-      .toolbar input {
-        width: 100%;
-      }
+    .buddy-dialogue {
+      background: var(--bubble-bg);
+      color: var(--text);
+      border: 2px solid var(--pink);
+      border-radius: 18px;
+      border-bottom-right-radius: 4px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      max-width: 220px;
+      animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .buddy-char {
+      width: 75px;
+      height: 75px;
+      cursor: pointer;
+      position: relative;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.3));
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .buddy-char:hover {
+      transform: scale(1.15) rotate(5deg);
+    }
+    .buddy-char:active {
+      transform: scale(0.9) rotate(-8deg);
+    }
+
+    /* CONFETTI CANVAS */
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* KEYFRAME ANIMATIONS */
+    @keyframes gentle-wobble {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-6deg); }
+      75% { transform: rotate(6deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+    @keyframes pop-in {
+      from { transform: scale(0.7) translateY(10px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    @keyframes cat-tail {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(18deg); }
+    }
+    @keyframes cat-ear {
+      0%, 100% { transform: rotate(0deg); }
+      20% { transform: rotate(-8deg); }
+      40% { transform: rotate(8deg); }
+    }
+    @keyframes cat-blink {
+      0%, 90%, 100% { transform: scaleY(1); }
+      95% { transform: scaleY(0.1); }
+    }
+
+    .anim-tail { transform-origin: 30px 65px; animation: cat-tail 2.5s ease-in-out infinite; }
+    .anim-ear-l { transform-origin: 25px 25px; animation: cat-ear 4s ease-in-out infinite; }
+    .anim-ear-r { transform-origin: 65px 25px; animation: cat-ear 4s ease-in-out infinite 0.5s; }
+    .anim-eye { transform-origin: center; animation: cat-blink 4s infinite; }
+
+    @media(max-width:1080px){
+      .workspace { flex-direction: column; gap: 20px; }
+      .panel-left, .panel-right { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      .workspace-splitter { display: none; }
+      .pdf-frame { height: 520px; }
+      .desk-buddy { bottom: 15px; right: 15px; }
+      .buddy-dialogue { max-width: 170px; font-size: 12px; }
+    }
+    @media(max-width:650px){
+      .wrap { padding: 18px 14px 70px; }
+      header { flex-direction: column; align-items: flex-start; }
+      .controls { width: 100%; justify-content: space-between; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .actions .btn { flex: 1; justify-content: center; }
+      .desk-buddy { display: none; }
     }
   </style>
 </head>
 <body>
+  <canvas id="confettiCanvas"></canvas>
+
   <main class="wrap">
+    <!-- HEADER -->
     <header>
       <div class="brand">
-        <div class="logo">HCD</div>
+        <div class="logo-box">
+          <div class="logo" id="logoClick" title="Chạm nhẹ tui nè!">🐾</div>
+          <span class="logo-badge">✨</span>
+        </div>
         <div>
-          <h1>HCDAccounting</h1>
-          <p>Chuyển đổi PDF hoá đơn sang Excel thông minh</p>
+          <h1>HCDAccounting <span style="font-size: 14px; font-weight: 600; color: var(--pink);">v2.0 Cute</span></h1>
+          <p>Trợ lý Miu Miu giúp chuyển PDF hoá đơn sang Excel siêu tốc 📑✨</p>
         </div>
       </div>
       <div class="controls">
-        <div class="status"><i class="dot"></i>Parser engine sẵn sàng</div>
+        <div class="status" id="sysStatus"><i class="dot"></i><span>Miu Miu đang túc trực (˶ᵔ ᵕ ᵔ˶)</span></div>
+        <button class="sound-btn" id="soundToggle" title="Bật/Tắt âm thanh">🔔</button>
         <button class="theme" id="theme" title="Đổi giao diện">☀</button>
       </div>
     </header>
 
+    <!-- PET PICKER -->
+    <div class="pet-picker-bar">
+      <span>🐾 Trợ lý cưng:</span>
+      <button class="pet-btn active" data-pet="cat">🐱 Mèo Miu Miu</button>
+      <button class="pet-btn" data-pet="bunny">🐰 Thỏ Mochi</button>
+      <button class="pet-btn" data-pet="corgi">🐶 Corgi Mông Bự</button>
+    </div>
+
+    <!-- DROPZONE WITH CUTE MASCOT -->
     <section class="drop" id="drop">
-      <div class="drop-icon">⇧</div>
-      <strong>Kéo thả hoá đơn PDF vào đây</strong>
-      <p>hoặc bấm để chọn nhiều file PDF từ thiết bị</p>
+      <div class="drop-mascot-box">
+        <svg class="mascot-svg" id="dropMascot" viewBox="0 0 100 100">
+          <path class="anim-tail" d="M30,68 C15,70 10,50 20,45" fill="none" stroke="#f472b6" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="50" cy="52" r="32" fill="#ec4899"/>
+          <!-- Ears -->
+          <polygon class="anim-ear-l" points="26,30 36,8 48,26" fill="#ec4899"/>
+          <polygon points="30,26 36,14 44,25" fill="#fbcfe8"/>
+          <polygon class="anim-ear-r" points="52,26 64,8 74,30" fill="#ec4899"/>
+          <polygon points="56,25 64,14 70,26" fill="#fbcfe8"/>
+          <!-- Eyes -->
+          <ellipse class="anim-eye" id="mascotEyeL" cx="40" cy="46" rx="4" ry="5.5" fill="#ffffff"/>
+          <ellipse class="anim-eye" id="mascotEyeR" cx="60" cy="46" rx="4" ry="5.5" fill="#ffffff"/>
+          <circle cx="41" cy="45" r="2" fill="#1e1e2f"/>
+          <circle cx="61" cy="45" r="2" fill="#1e1e2f"/>
+          <!-- Blush -->
+          <circle cx="32" cy="54" r="4.5" fill="#fbcfe8" opacity="0.8"/>
+          <circle cx="68" cy="54" r="4.5" fill="#fbcfe8" opacity="0.8"/>
+          <!-- Nose & Mouth -->
+          <polygon points="50,51 47,48 53,48" fill="#fbcfe8"/>
+          <path id="mascotMouth" d="M45,55 Q50,59 55,55" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Paws holding border -->
+          <ellipse cx="38" cy="78" rx="7" ry="5" fill="#ffffff"/>
+          <ellipse cx="62" cy="78" rx="7" ry="5" fill="#ffffff"/>
+        </svg>
+      </div>
+      <strong>Thả file PDF hoá đơn vào đây nè Hồ Cẩm Đào ơi! ฅ^•ﻌ•^ฅ</strong>
+      <p>hoặc bấm vào đây để chọn nhiều file từ máy tính</p>
+      <span class="drop-tag">✨ Nhận diện tự động VAT, chiết khấu, từng món</span>
       <input id="input" type="file" accept="application/pdf" multiple>
     </section>
 
+    <!-- FILE LIST -->
     <div class="files" id="files"></div>
 
+    <!-- ACTIONS -->
     <div class="actions">
-      <button class="btn primary" id="process" disabled>▶ Chuyển đổi hoá đơn</button>
-      <button class="btn" id="save" disabled>💾 Lưu chỉnh sửa</button>
-      <button class="btn success" id="download" hidden>↓ Xuất Excel (.xlsx)</button>
-      <button class="btn" id="reset">↻ Làm mới</button>
+      <button class="btn primary" id="process" disabled>🚀 Chuyển đổi hoá đơn ngay</button>
+      <button class="btn" id="save" disabled>💾 Lưu thay đổi</button>
+      <button class="btn success" id="download" hidden>✨ Xuất file Excel (.xlsx)</button>
+      <button class="btn" id="reset">↻ Làm mới (Reset)</button>
     </div>
 
     <div id="notice"></div>
+
+    <!-- STATS -->
     <section id="stats"></section>
 
+    <!-- TABS -->
     <nav class="tabs">
-      <button class="tab active" data-view="sheet">📊 Excel trực tiếp</button>
-      <button class="tab" data-view="receipts">🧾 Chi tiết từng hoá đơn</button>
+      <button class="tab active" data-view="sheet">📊 Bảng Excel trực quan</button>
+      <button class="tab" data-view="receipts">🧾 Danh thiếp từng hoá đơn</button>
     </nav>
 
+    <!-- TOOLBAR -->
     <div class="toolbar">
-      <span class="meta" id="meta">Chưa có dữ liệu xử lý</span>
-      <input id="search" placeholder="Tìm mã đơn, tên món, giảm giá…">
+      <span class="meta" id="meta">🐾 Chưa có dữ liệu xử lý</span>
+      <input id="search" placeholder="🔍 Tìm mã đơn, tên món, giảm giá…">
     </div>
 
+    <!-- MAIN WORKSPACE WITH RESIZABLE SPLITTER -->
     <section id="sheetView" class="workspace">
       <div class="panel panel-left" id="excelPanel">
         <div class="panel-head">
-          <span>Excel workspace <small>· bấm vào ô để chỉnh sửa</small></span>
-          <small id="editState">Chưa có dữ liệu</small>
+          <span>📝 Excel Workspace <small>· bấm vào ô bất kỳ để sửa</small></span>
+          <small id="editState">Đã đồng bộ ✨</small>
         </div>
         <div class="sheet-wrap" id="sheet">
-          <div class="empty">Tải PDF và bấm “Chuyển đổi hoá đơn” để mở workspace.</div>
+          <div class="empty">
+            <div class="empty-icon">🐱💤</div>
+            <div>Miu Miu đang đợi bạn tải hoá đơn PDF lên để biến hình thành Excel đó!</div>
+          </div>
         </div>
       </div>
 
       <div class="workspace-splitter" id="splitter" title="Kéo qua lại để điều chỉnh độ rộng 2 bảng" role="separator" aria-orientation="vertical" tabindex="0">
         <div class="splitter-line"></div>
-        <div class="splitter-handle">
-          <svg width="6" height="18" viewBox="0 0 6 18" fill="none">
-            <circle cx="3" cy="3" r="1.5" fill="currentColor"/>
-            <circle cx="3" cy="9" r="1.5" fill="currentColor"/>
-            <circle cx="3" cy="15" r="1.5" fill="currentColor"/>
-          </svg>
-        </div>
+        <div class="splitter-handle">🐾</div>
       </div>
 
       <aside class="panel panel-right" id="pdfPanel">
         <div class="panel-head">
-          <span>PDF nguồn</span>
+          <span>📄 PDF Gốc Đối Chiếu</span>
           <select id="pdfSelect" class="pdf-select" disabled></select>
         </div>
         <iframe id="pdf" class="pdf-frame" title="PDF nguồn">
-          <p>Trình duyệt không hỗ trợ xem PDF.</p>
+          <p>Trình duyệt không hỗ trợ xem trực tiếp PDF.</p>
         </iframe>
       </aside>
     </section>
@@ -686,76 +1050,449 @@
     <section id="receipts" class="cards" hidden></section>
   </main>
 
+  <!-- DESK BUDDY MASCOT WIDGET -->
+  <div class="desk-buddy" id="deskBuddy">
+    <div class="buddy-dialogue-wrap" style="display:flex; flex-direction:column; align-items:flex-end;">
+      <div class="buddy-dialogue" id="buddySpeech">Chào bạn Hồ Cẩm Đào! Quẳng hoá đơn dô đây Miu tính giúp cho meow~ 🐾</div>
+      <div class="feeder-bar">
+        <button class="feed-btn" id="feedFish">🐟 Thưởng cá</button>
+        <button class="feed-btn" id="feedBoba">🧋 Cho trà sữa</button>
+      </div>
+    </div>
+    <div class="buddy-char" id="buddyChar" title="Bấm vào tui để nựng!">
+      <div class="zzz-bubble" id="zzzIndicator" style="display:none;">Z z z…</div>
+      <svg id="buddyCharSvg" viewBox="0 0 100 100" style="width:100%;height:100%;">
+        <path class="anim-tail" d="M25,70 C10,75 5,55 15,48" fill="none" stroke="#ec4899" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="50" cy="55" r="35" fill="#f472b6"/>
+        <!-- Ears -->
+        <polygon class="anim-ear-l" points="22,30 32,5 45,25" fill="#f472b6"/>
+        <polygon points="26,26 32,12 40,24" fill="#ffffff"/>
+        <polygon class="anim-ear-r" points="55,25 68,5 78,30" fill="#f472b6"/>
+        <polygon points="60,24 68,12 74,26" fill="#ffffff"/>
+        <!-- Eyes Cute -->
+        <g id="buddyEyes">
+          <circle class="anim-eye" cx="38" cy="48" r="5" fill="#1e1e2e"/>
+          <circle cx="36" cy="46" r="1.8" fill="#ffffff"/>
+          <circle class="anim-eye" cx="62" cy="48" r="5" fill="#1e1e2e"/>
+          <circle cx="60" cy="46" r="1.8" fill="#ffffff"/>
+        </g>
+        <!-- Blush -->
+        <ellipse cx="28" cy="56" rx="5" ry="3" fill="#fb7185" opacity="0.7"/>
+        <ellipse cx="72" cy="56" rx="5" ry="3" fill="#fb7185" opacity="0.7"/>
+        <!-- Mouth -->
+        <path id="buddyMouth" d="M44,57 Q50,62 56,57" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Bell ribbon -->
+        <rect x="35" y="76" width="30" height="6" rx="3" fill="#fbbf24"/>
+        <circle cx="50" cy="80" r="4" fill="#f59e0b"/>
+      </svg>
+    </div>
+  </div>
+
   <script>
     const $ = s => document.querySelector(s);
-    const drop = $('#drop');
-    const input = $('#input');
-    const filesEl = $('#files');
-    const processBtn = $('#process');
-    const saveBtn = $('#save');
-    const downloadBtn = $('#download');
-    const notice = $('#notice');
-    const stats = $('#stats');
-    const sheet = $('#sheet');
-    const cards = $('#receipts');
-    const pdf = $('#pdf');
-    const pdfSelect = $('#pdfSelect');
-    const search = $('#search');
-    const splitter = $('#splitter');
-    const workspace = $('#sheetView');
-    const excelPanel = $('#excelPanel');
-    const pdfPanel = $('#pdfPanel');
+    const drop = $('#drop'), input = $('#input'), filesEl = $('#files'),
+          processBtn = $('#process'), saveBtn = $('#save'), downloadBtn = $('#download'),
+          notice = $('#notice'), stats = $('#stats'), sheet = $('#sheet'),
+          cards = $('#receipts'), pdf = $('#pdf'), pdfSelect = $('#pdfSelect'),
+          search = $('#search'), buddySpeech = $('#buddySpeech'),
+          buddyChar = $('#buddyChar'), dropMascot = $('#dropMascot'),
+          soundToggle = $('#soundToggle'), splitter = $('#splitter'),
+          workspace = $('#sheetView'), excelPanel = $('#excelPanel'),
+          pdfPanel = $('#pdfPanel');
 
-    let files = [];
-    let result = null;
-    let jobId = null;
-    let dirty = false;
-    let activeSource = 0;
+    let files = [], result = null, jobId = null, dirty = false, activeSource = 0;
+    let soundEnabled = true;
+    let currentPet = 'cat';
+    let idleTimer = null;
+    let isSleeping = false;
+
+    // WEB AUDIO SOUND SYNTHESIZER
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playCuteSound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'meow' || type === 'purr') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(450, now);
+          osc.frequency.exponentialRampToValueAtTime(750, now + 0.12);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.28);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === 'pop') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(800, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'coin') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(987.77, now);
+          osc.frequency.setValueAtTime(1318.51, now + 0.08);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'success') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.type = 'sine';
+            o.frequency.setValueAtTime(freq, now + idx * 0.08);
+            g.gain.setValueAtTime(0.12, now + idx * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.25);
+            o.start(now + idx * 0.08);
+            o.stop(now + idx * 0.08 + 0.25);
+          });
+        } else if (type === 'nom') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(550, now);
+          osc.frequency.exponentialRampToValueAtTime(250, now + 0.06);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
+          osc.start(now);
+          osc.stop(now + 0.07);
+        }
+      } catch (e) {}
+    }
+
+    soundToggle.onclick = () => {
+      soundEnabled = !soundEnabled;
+      soundToggle.textContent = soundEnabled ? '🔔' : '🔕';
+      setMascotMood('excited', soundEnabled ? 'Đã bật âm thanh meow meow~ 🎶' : 'Đã tắt tiếng im ắng rồi Hồ Cẩm Đào nha 🤫');
+      if (soundEnabled) playCuteSound('pop');
+    };
+
+    // MOUSE PAW & SPARKLE TRAIL
+    let lastPawTime = 0;
+    window.addEventListener('mousemove', e => {
+      wakeMascot();
+      const now = Date.now();
+      if (now - lastPawTime > 120) {
+        lastPawTime = now;
+        spawnPawParticle(e.clientX, e.clientY);
+      }
+    });
+
+    function spawnPawParticle(x, y) {
+      const p = document.createElement('div');
+      p.className = 'paw-particle';
+      const items = ['🐾', '✨', '🌸', '💫'];
+      p.textContent = items[Math.floor(Math.random() * items.length)];
+      p.style.left = `${x - 10}px`;
+      p.style.top = `${y - 10}px`;
+      p.style.fontSize = `${Math.floor(Math.random() * 8) + 12}px`;
+      p.style.opacity = '0.7';
+      p.style.transform = `scale(0.8) rotate(${Math.random()*40 - 20}deg)`;
+      document.body.appendChild(p);
+
+      setTimeout(() => {
+        p.style.transform = `translateY(18px) scale(0.3) rotate(${Math.random()*60 - 30}deg)`;
+        p.style.opacity = '0';
+      }, 30);
+      setTimeout(() => p.remove(), 800);
+    }
+
+    // IDLE SLEEP MECHANIC
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        putMascotToSleep();
+      }, 15000);
+    }
+
+    function putMascotToSleep() {
+      if (isSleeping) return;
+      isSleeping = true;
+      $('#zzzIndicator').style.display = 'block';
+      $('#buddyEyes').innerHTML = `
+        <path d="M33,48 Q38,53 43,48" stroke="#1e1e2e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M57,48 Q62,53 67,48" stroke="#1e1e2e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      `;
+      buddySpeech.textContent = 'Khò khò... Bạn Hồ Cẩm Đào làm việc ngoan nha, Miu chợp mắt xíu... zZz';
+    }
+
+    function wakeMascot() {
+      resetIdleTimer();
+      if (!isSleeping) return;
+      isSleeping = false;
+      $('#zzzIndicator').style.display = 'none';
+      $('#buddyEyes').innerHTML = `
+        <circle class="anim-eye" cx="38" cy="48" r="5" fill="#1e1e2e"/>
+        <circle cx="36" cy="46" r="1.8" fill="#ffffff"/>
+        <circle class="anim-eye" cx="62" cy="48" r="5" fill="#1e1e2e"/>
+        <circle cx="60" cy="46" r="1.8" fill="#ffffff"/>
+      `;
+      setMascotMood('excited', 'Ú oà! Miu tỉnh rồi nè, tiếp tục quẩy hoá đơn thôi Hồ Cẩm Đào ơi! 🐾✨');
+      playCuteSound('pop');
+    }
+    resetIdleTimer();
+
+    // FEEDING PETS
+    $('#feedFish').onclick = (e) => {
+      e.stopPropagation();
+      wakeMascot();
+      playCuteSound('nom');
+      spawnFloatingHeart(buddyChar, '🐟');
+      setMascotMood('excited', 'Ngon xỉu luônnn! Miu đã được nạp 100% năng lượng kế toán meow! 🐾💖');
+    };
+
+    $('#feedBoba').onclick = (e) => {
+      e.stopPropagation();
+      wakeMascot();
+      playCuteSound('nom');
+      spawnFloatingHeart(buddyChar, '🧋');
+      setMascotMood('excited', 'Trà sữa full topping trân châu đường đen 100 điểm cho bạn Hồ Cẩm Đào! ✨🥤');
+    };
+
+    // PET SWITCHER
+    document.querySelectorAll('.pet-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.pet-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentPet = btn.dataset.pet;
+        playCuteSound('pop');
+        updatePetAppearance();
+      };
+    });
+
+    function updatePetAppearance() {
+      const svg = $('#buddyCharSvg');
+      if (currentPet === 'bunny') {
+        svg.innerHTML = `
+          <ellipse cx="50" cy="58" r="32" fill="#fed7aa"/>
+          <ellipse cx="36" cy="22" rx="7" ry="20" fill="#fed7aa"/>
+          <ellipse cx="36" cy="22" rx="4" ry="14" fill="#f472b6"/>
+          <ellipse cx="64" cy="22" rx="7" ry="20" fill="#fed7aa"/>
+          <ellipse cx="64" cy="22" rx="4" ry="14" fill="#f472b6"/>
+          <g id="buddyEyes">
+            <circle cx="38" cy="52" r="4.5" fill="#431407"/>
+            <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
+            <circle cx="62" cy="52" r="4.5" fill="#431407"/>
+            <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
+          </g>
+          <ellipse cx="28" cy="58" rx="5" ry="3" fill="#fb7185" opacity="0.6"/>
+          <ellipse cx="72" cy="58" rx="5" ry="3" fill="#fb7185" opacity="0.6"/>
+          <polygon points="50,56 47,54 53,54" fill="#f472b6"/>
+          <path d="M46,60 Q50,64 54,60" fill="none" stroke="#431407" stroke-width="2" stroke-linecap="round"/>
+        `;
+        setMascotMood('excited', 'Chào bạn Hồ Cẩm Đào! Mochi thỏ nhảy tưng bừng tới giúp bạn Hồ Cẩm Đào nè! 🐰🥕');
+      } else if (currentPet === 'corgi') {
+        svg.innerHTML = `
+          <ellipse cx="50" cy="58" r="33" fill="#fb923c"/>
+          <polygon points="24,38 34,14 44,32" fill="#ea580c"/>
+          <polygon points="28,34 34,18 40,30" fill="#fed7aa"/>
+          <polygon points="56,32 66,14 76,38" fill="#ea580c"/>
+          <polygon points="60,30 66,18 72,34" fill="#fed7aa"/>
+          <ellipse cx="50" cy="62" rx="14" ry="18" fill="#fff7ed"/>
+          <g id="buddyEyes">
+            <circle cx="37" cy="52" r="4.5" fill="#1c1917"/>
+            <circle cx="35.5" cy="50.5" r="1.5" fill="#ffffff"/>
+            <circle cx="63" cy="52" r="4.5" fill="#1c1917"/>
+            <circle cx="61.5" cy="50.5" r="1.5" fill="#ffffff"/>
+          </g>
+          <ellipse cx="50" cy="57" rx="5" ry="3.5" fill="#1c1917"/>
+          <path d="M48,62 Q50,68 52,62" fill="#fb7185" stroke="#1c1917" stroke-width="1.5"/>
+        `;
+        setMascotMood('excited', 'Gâu gâu! Corgi mông bự sẵn sàng đếm tiền cùng bạn Hồ Cẩm Đào rồi! 🐶🦴');
+      } else {
+        svg.innerHTML = `
+          <path class="anim-tail" d="M25,70 C10,75 5,55 15,48" fill="none" stroke="#ec4899" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="50" cy="55" r="35" fill="#f472b6"/>
+          <polygon class="anim-ear-l" points="22,30 32,5 45,25" fill="#f472b6"/>
+          <polygon points="26,26 32,12 40,24" fill="#ffffff"/>
+          <polygon class="anim-ear-r" points="55,25 68,5 78,30" fill="#f472b6"/>
+          <polygon points="60,24 68,12 74,26" fill="#ffffff"/>
+          <g id="buddyEyes">
+            <circle class="anim-eye" cx="38" cy="48" r="5" fill="#1e1e2e"/>
+            <circle cx="36" cy="46" r="1.8" fill="#ffffff"/>
+            <circle class="anim-eye" cx="62" cy="48" r="5" fill="#1e1e2e"/>
+            <circle cx="60" cy="46" r="1.8" fill="#ffffff"/>
+          </g>
+          <ellipse cx="28" cy="56" rx="5" ry="3" fill="#fb7185" opacity="0.7"/>
+          <ellipse cx="72" cy="56" rx="5" ry="3" fill="#fb7185" opacity="0.7"/>
+          <path id="buddyMouth" d="M44,57 Q50,62 56,57" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="35" y="76" width="30" height="6" rx="3" fill="#fbbf24"/>
+          <circle cx="50" cy="80" r="4" fill="#f59e0b"/>
+        `;
+        setMascotMood('excited', 'Miu Miu đã trở lại quấn quýt bên bạn Hồ Cẩm Đào rồi meow~ 🐾✨');
+      }
+    }
+
+    const cutePhrases = [
+      "Hồ Cẩm Đào ơi làm ly trà sữa rồi tính tiếp nà! 🧋",
+      "Miu Miu quét số chuẩn 100% không lệch 1 xu meow~ ✨",
+      "Vuốt ve tui nữa đi, đã quá meow meow~ (˶ᵔ ᵕ ᵔ˶)",
+      "Đơn nào có giảm giá là Miu thích nhất á! 💸",
+      "Kéo thả thêm nhiều hoá đơn nữa đi Hồ Cẩm Đào ơi! 🐾",
+      "Cố lên Hồ Cẩm Đào ơi, sắp xong việc về ngủ rồi! ฅ^•ﻌ•^ฅ",
+      "Chu choa, bạn Hồ Cẩm Đào tính toán cừ khôi ghê ta! 🌟"
+    ];
+
+    function setMascotMood(mood, text) {
+      if (text) buddySpeech.textContent = text;
+      const mouth = $('#mascotMouth');
+      if (mouth) {
+        if (mood === 'excited') {
+          mouth.setAttribute('d', 'M43,53 Q50,65 57,53 Z');
+          mouth.setAttribute('fill', '#ffffff');
+        } else if (mood === 'working') {
+          mouth.setAttribute('d', 'M45,55 L55,55');
+          mouth.setAttribute('fill', 'none');
+        } else {
+          mouth.setAttribute('d', 'M45,55 Q50,59 55,55');
+          mouth.setAttribute('fill', 'none');
+        }
+      }
+    }
+
+    buddyChar.onclick = () => {
+      wakeMascot();
+      playCuteSound('purr');
+      const rand = cutePhrases[Math.floor(Math.random() * cutePhrases.length)];
+      setMascotMood('excited', rand);
+      spawnFloatingHeart(buddyChar);
+    };
+
+    $('#logoClick').onclick = () => {
+      playCuteSound('success');
+      fireConfetti(35);
+      setMascotMood('excited', 'HCDAccounting x Miu Miu hân hạnh phục vụ bạn Hồ Cẩm Đào! 🐾');
+    };
+
+    function spawnFloatingHeart(target, emoji) {
+      const rect = target.getBoundingClientRect();
+      const el = document.createElement('div');
+      el.textContent = emoji || ['💖', '🐾', '✨', '🌸', '⭐', '😻'][Math.floor(Math.random()*6)];
+      el.style.cssText = `position:fixed;left:${rect.left + rect.width/2}px;top:${rect.top}px;font-size:22px;pointer-events:none;z-index:99999;transition:all 0.9s cubic-bezier(0.1, 1, 0.1, 1);transform:translate(-50%, 0);`;
+      document.body.appendChild(el);
+      setTimeout(() => {
+        el.style.transform = `translate(-50%, -75px) scale(1.4)`;
+        el.style.opacity = '0';
+      }, 20);
+      setTimeout(() => el.remove(), 950);
+    }
+
+    // Confetti Engine
+    function fireConfetti(count = 70) {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const pieces = [];
+      const colors = ['#f472b6', '#38bdf8', '#34d399', '#fbbf24', '#a855f7', '#fb7185'];
+
+      for (let i = 0; i < count; i++) {
+        pieces.push({
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2 + 50,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 16,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rSpeed: (Math.random() - 0.5) * 10,
+          alpha: 1
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        pieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35;
+          p.rotation += p.rSpeed;
+          p.alpha -= 0.012;
+          if (p.alpha > 0) {
+            alive = true;
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          }
+        });
+        if (alive) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      draw();
+    }
 
     function esc(v) {
       const d = document.createElement('div');
       d.textContent = v ?? '';
       return d.innerHTML;
     }
-
     function money(v) {
       return (v < 0 ? '-' : '') + Math.abs(Math.round(v || 0)).toLocaleString('vi-VN') + ' ₫';
     }
-
     function bytes(n) {
       return n ? (n / 1048576).toFixed(n < 1048576 ? 1 : 2) + ' MB' : '';
     }
-
     function parseMoney(v) {
       const x = String(v).replace(/[^\d,.-]/g, '');
       if (!x) return 0;
       return Number(x.replace(/\./g, '').replace(',', '.')) || 0;
     }
-
     function setDirty(v = true) {
       dirty = v;
       saveBtn.disabled = !result || !dirty;
-      $('#editState').textContent = dirty ? 'Chưa lưu thay đổi' : 'Đã đồng bộ';
+      $('#editState').textContent = dirty ? '⚠ Chưa lưu thay đổi' : 'Đã đồng bộ ✨';
     }
 
-    // Theme toggle
+    // THEME TOGGLE
     $('#theme').onclick = () => {
+      playCuteSound('pop');
       const root = document.documentElement;
       const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
       root.dataset.theme = next;
       localStorage.rf_theme = next;
       $('#theme').textContent = next === 'dark' ? '☀' : '☾';
+      setMascotMood('excited', next === 'dark' ? 'Đã bật chế độ Dark Mode êm mắt cho bạn Hồ Cẩm Đào 🌙' : 'Chế độ sáng rực rỡ chào ngày mới! ☀️');
     };
     document.documentElement.dataset.theme = localStorage.rf_theme || 'dark';
+    $('#theme').textContent = (localStorage.rf_theme || 'dark') === 'dark' ? '☀' : '☾';
 
-    // File Drag & Drop
-    drop.onclick = () => input.click();
+    // DRAG & DROP
+    drop.onclick = () => { playCuteSound('pop'); input.click(); };
     input.onchange = () => add(input.files);
-    ['dragover', 'dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => {
-      e.preventDefault();
-      drop.classList.toggle('drag', ev === 'dragover');
-    }));
-    drop.addEventListener('drop', e => add(e.dataTransfer.files));
+    
+    ['dragover', 'dragleave', 'drop'].forEach(ev => {
+      drop.addEventListener(ev, e => {
+        e.preventDefault();
+        const isOver = ev === 'dragover';
+        drop.classList.toggle('drag', isOver);
+        if (isOver) {
+          setMascotMood('excited', 'Ngoạm PDF nè Hồ Cẩm Đào ơi! Thả vào bụng tui đi meow! 🐾📄');
+        }
+      });
+    });
+
+    drop.addEventListener('drop', e => {
+      playCuteSound('pop');
+      add(e.dataTransfer.files);
+      setMascotMood('normal', 'Nhận file ngon lành gòi! Bấm chuyển đổi nha bạn Hồ Cẩm Đào ✨');
+    });
 
     function add(list) {
       for (const f of list) {
@@ -763,33 +1500,37 @@
       }
       renderFiles();
     }
-
     function removeFile(i) {
+      playCuteSound('pop');
       files.splice(i, 1);
       renderFiles();
+      setMascotMood('normal', 'Đã xoá bớt 1 file meow~');
     }
-
     function renderFiles() {
       filesEl.innerHTML = files.map((f, i) => `
         <div class="file">
           <div class="file-name">📄 ${esc(f.name)}<small>${bytes(f.size)}</small></div>
-          <button class="remove" onclick="removeFile(${i})">×</button>
+          <button class="remove" onclick="removeFile(${i})" title="Bỏ file này">✕</button>
         </div>
       `).join('');
       processBtn.disabled = !files.length;
     }
 
-    // Process PDF
+    // PROCESS CONVERSION
     processBtn.onclick = async () => {
+      playCuteSound('pop');
       processBtn.disabled = true;
-      processBtn.textContent = '⌛ Đang phân tích…';
+      processBtn.textContent = '⌛ Miu Miu đang tính toán…';
+      setMascotMood('working', 'Đang soi từng dòng hoá đơn... Đợi Miu xíu xiu nha 🔍🐾');
       notice.innerHTML = '';
       const form = new FormData();
       files.forEach(f => form.append('files', f));
+
       try {
         const res = await fetch('/api/v1/receipts/upload', { method: 'POST', body: form });
         const data = await res.json();
         if (!res.ok) throw Error(data.detail?.message || data.detail || 'Không xử lý được PDF');
+        
         result = data;
         jobId = data.job_id;
         activeSource = data.source_files[0]?.index ?? 0;
@@ -797,11 +1538,16 @@
         setDirty(false);
         populatePdf();
         render();
+        
+        playCuteSound('success');
+        fireConfetti(90);
+        setMascotMood('excited', 'Woa biến hoá đơn thành Excel xong rồi nè! Đã đóng mộc ĐÃ DUYỆT 🐾');
       } catch (e) {
-        notice.innerHTML = `<div class="notice">⚠ ${esc(e.message)}</div>`;
+        notice.innerHTML = `<div class="notice">😿 Oimeoi: ${esc(e.message)}</div>`;
+        setMascotMood('normal', 'U là trời, file này hơi lạ hoặc lỗi kết nối rùi Hồ Cẩm Đào ơi (╥﹏╥)');
       } finally {
         processBtn.disabled = false;
-        processBtn.textContent = '▶ Chuyển đổi hoá đơn';
+        processBtn.textContent = '🚀 Chuyển đổi hoá đơn ngay';
       }
     };
 
@@ -818,13 +1564,13 @@
       }
       pdfSelect.value = activeSource;
     }
-
     pdfSelect.onchange = () => {
       activeSource = Number(pdfSelect.value);
       showPdf();
     };
 
     function selectReceipt(i) {
+      playCuteSound('pop');
       activeSource = Number(result.receipts[i].source_file_index || 0);
       showPdf();
       document.querySelector('.panel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -839,12 +1585,11 @@
     }
 
     function cellBlur(el) {
-      const r = Number(el.dataset.r);
-      const row = Number(el.dataset.row);
-      const field = el.dataset.field;
+      const r = Number(el.dataset.r), row = Number(el.dataset.row), field = el.dataset.field;
       result.receipts[r].rows[row][field] = field === 'amount' ? parseMoney(el.textContent) : el.textContent.trim();
       recalc();
       setDirty();
+      playCuteSound('coin');
       render();
     }
 
@@ -856,45 +1601,73 @@
 
       stats.innerHTML = `
         <div class="stats">
-          <div class="stat"><small>Số hoá đơn</small><strong>${s.receipt_count}</strong></div>
-          <div class="stat"><small>Tổng số món</small><strong>${s.item_count}</strong></div>
-          <div class="stat"><small>Tổng giảm giá</small><strong class="red">${money(s.total_discount)}</strong></div>
-          <div class="stat"><small>Tổng doanh thu</small><strong class="green">${money(s.total_revenue)}</strong></div>
+          <div class="stat">
+            <span class="stat-icon">📑</span>
+            <small>Số hoá đơn</small>
+            <strong>${s.receipt_count}</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">🧮</span>
+            <small>Tổng số món</small>
+            <strong>${s.item_count}</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">🎁</span>
+            <small>Tổng giảm giá</small>
+            <strong class="red">${money(s.total_discount)}</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">💰</span>
+            <small>Tổng doanh thu</small>
+            <strong class="green">${money(s.total_revenue)}</strong>
+          </div>
         </div>
       `;
 
-      $('#meta').textContent = `Hiển thị ${rs.length}/${result.receipts.length} hoá đơn · Job #${jobId.slice(0, 8)}`;
+      $('#meta').textContent = `Hiển thị ${rs.length}/${result.receipts.length} hoá đơn · Mã Job #${String(jobId).slice(0, 8)} ✨`;
 
-      let html = '<table class="sheet"><thead><tr><th>Tên món / Diễn giải</th><th class="amount">Thành tiền</th></tr></thead><tbody>';
+      let html = '<table class="sheet"><thead><tr><th>Tên món / Diễn giải</th><th class="amount" style="width:160px">Thành tiền</th></tr></thead><tbody>';
       rs.forEach(({ r, i }) => {
         let total = 0;
-        html += `<tr class="receipt-head" onclick="selectReceipt(${i})"><td colspan="2">${esc(r.display_name)} · xem PDF →</td></tr>`;
+        html += `<tr class="receipt-head" onclick="selectReceipt(${i})" title="Bấm để xem PDF gốc"><td colspan="2">🧾 ${esc(r.display_name)} <span style="font-size:11px;opacity:0.8">(Xem PDF →)</span></td></tr>`;
         r.rows.forEach((x, row) => {
           if (x.type === 'qty') {
-            html += `<tr class="qty-head"><td colspan="2">${esc(x.label)}</td></tr>`;
+            html += `<tr class="qty-head"><td colspan="2">🐾 Số lượng: ${esc(x.label)}</td></tr>`;
             return;
           }
           total += x.amount || 0;
-          html += `<tr class="${x.type === 'discount' ? 'discount' : ''}"><td class="editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="label">${esc(x.label)}</td><td class="amount editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="amount">${money(x.amount)}</td></tr>`;
+          html += `
+            <tr class="${x.type === 'discount' ? 'discount' : ''}">
+              <td class="editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="label">${esc(x.label)}</td>
+              <td class="amount editable" contenteditable="true" data-r="${i}" data-row="${row}" data-field="amount">${money(x.amount)}</td>
+            </tr>
+          `;
         });
-        html += `<tr class="total"><td>Tổng</td><td class="amount">${money(total)}</td></tr>`;
+        html += `<tr class="total"><td>✨ Tổng cộng</td><td class="amount">${money(total)}</td></tr>`;
       });
       sheet.innerHTML = html + '</tbody></table>';
+
       sheet.querySelectorAll('[contenteditable]').forEach(e => e.addEventListener('blur', () => cellBlur(e)));
 
       cards.innerHTML = rs.map(({ r }) => {
         let total = 0;
         const rows = r.rows.map(x => {
-          if (x.type === 'qty') {
-            return `<div class="rrow qty">${esc(x.label)}</div>`;
-          }
+          if (x.type === 'qty') { return `<div class="rrow qty">🐾 Số lượng: ${esc(x.label)}</div>`; }
           total += x.amount || 0;
           return `<div class="rrow ${x.type === 'discount' ? 'discount' : ''}"><span>${esc(x.label)}</span><span class="amount">${money(x.amount)}</span></div>`;
         }).join('');
-        return `<article class="receipt"><div class="rhead">${esc(r.display_name)}</div>${rows}<div class="rrow total"><span>Tổng đơn</span><span>${money(total)}</span></div></article>`;
-      }).join('') || '<div class="empty">Không tìm thấy dữ liệu phù hợp.</div>';
+        return `
+          <article class="receipt" style="position:relative;">
+            <div class="stamp-badge">✓ ĐÃ DUYỆT 🐾</div>
+            <div class="rhead"><span>🧾 ${esc(r.display_name)}</span><span>🐾</span></div>
+            ${rows}
+            <div class="rrow total"><span>Tổng hoá đơn</span><span class="amount">${money(total)}</span></div>
+          </article>
+        `;
+      }).join('') || '<div class="empty"><div class="empty-icon">🔍😿</div><div>Không tìm thấy kết quả phù hợp meow...</div></div>';
     }
 
+    // SAVE EDITS
     saveBtn.onclick = async () => {
       saveBtn.disabled = true;
       saveBtn.textContent = '⌛ Đang lưu…';
@@ -909,28 +1682,38 @@
         result = data;
         setDirty(false);
         render();
+        playCuteSound('success');
+        setMascotMood('excited', 'Đã lưu mọi chỉnh sửa an toàn vào kho dữ liệu meow! 💾✨');
       } catch (e) {
         notice.innerHTML = `<div class="notice">⚠ ${esc(e.message)}</div>`;
       } finally {
-        saveBtn.textContent = '💾 Lưu chỉnh sửa';
+        saveBtn.textContent = '💾 Lưu thay đổi';
         saveBtn.disabled = !dirty;
       }
     };
 
-    downloadBtn.onclick = () => location.href = `/api/v1/receipts/jobs/${jobId}/excel`;
+    // DOWNLOAD EXCEL WITH CONFETTI
+    downloadBtn.onclick = () => {
+      playCuteSound('success');
+      fireConfetti(100);
+      setMascotMood('excited', 'File Excel xịn xò đang bay về máy tính của bạn Hồ Cẩm Đào đâyyy! 📁💖');
+      if (jobId) {
+        location.href = `/api/v1/receipts/jobs/${jobId}/excel`;
+      }
+    };
+
     search.oninput = render;
 
-    // Tabs switching
-    document.querySelectorAll('.tab').forEach(t => {
-      t.onclick = () => {
-        document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
-        const isSheet = t.dataset.view === 'sheet';
-        workspace.hidden = !isSheet;
-        cards.hidden = isSheet;
-      };
+    document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+      playCuteSound('pop');
+      document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+      const excel = t.dataset.view === 'sheet';
+      workspace.hidden = !excel;
+      cards.hidden = excel;
     });
 
     $('#reset').onclick = () => {
+      playCuteSound('pop');
       files = [];
       result = null;
       jobId = null;
@@ -938,18 +1721,19 @@
       input.value = '';
       renderFiles();
       stats.innerHTML = '';
-      sheet.innerHTML = '<div class="empty">Tải PDF để mở workspace.</div>';
+      sheet.innerHTML = '<div class="empty"><div class="empty-icon">🐱💤</div><div>Miu Miu đang đợi bạn tải hoá đơn PDF lên để bắt đầu lại đó!</div></div>';
       cards.innerHTML = '';
       pdf.src = 'about:blank';
       pdfSelect.innerHTML = '';
       pdfSelect.disabled = true;
       downloadBtn.hidden = true;
       saveBtn.disabled = true;
-      $('#meta').textContent = 'Chưa có dữ liệu xử lý';
+      $('#meta').textContent = '🐾 Chưa có dữ liệu xử lý';
       notice.innerHTML = '';
+      setMascotMood('normal', 'Bàn làm việc đã sạch bong! Ném thêm hoá đơn cho Miu nha 🐾');
     };
 
-    // Resizable Splitter Logic
+    // RESIZABLE SPLITTER LOGIC
     if (splitter && workspace && excelPanel && pdfPanel) {
       try {
         const saved = localStorage.getItem('rf_split_percent');
@@ -1012,27 +1796,6 @@
       splitter.addEventListener('pointerup', stopDragging);
       splitter.addEventListener('pointercancel', stopDragging);
       splitter.addEventListener('lostpointercapture', stopDragging);
-
-      // Keyboard accessibility (Left/Right arrows)
-      splitter.addEventListener('keydown', (e) => {
-        if (window.innerWidth <= 1080) return;
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-          e.preventDefault();
-          const rect = workspace.getBoundingClientRect();
-          const currentWidth = excelPanel.getBoundingClientRect().width;
-          const step = e.shiftKey ? 40 : 15;
-          let newWidth = currentWidth + (e.key === 'ArrowRight' ? step : -step);
-          const minWidth = 280;
-          const maxWidth = rect.width - 18 - minWidth;
-          if (newWidth < minWidth) newWidth = minWidth;
-          if (newWidth > maxWidth) newWidth = maxWidth;
-          const percent = (newWidth / rect.width) * 100;
-          excelPanel.style.flex = `0 0 calc(${percent.toFixed(2)}% - 9px)`;
-          try {
-            localStorage.setItem('rf_split_percent', percent.toFixed(2));
-          } catch (_) {}
-        }
-      });
     }
   </script>
 </body>
