@@ -28,6 +28,7 @@ PROMO_CODE_RE = re.compile(r"^[A-Z0-9]{6,25}$")
 ITEM_COUNT_RE = re.compile(r"^\d+\s*món$")
 DISCOUNT_HINTS = ("sale", "giảm giá", "ưu đãi", "khuyến mãi", "tặng ngay", "tặng kèm", "trái cây giảm sốc", "đồng tài trợ", "🌸", "🔥", "🍀", "🍄")
 CONDITION_KEYWORDS = ("tối thiểu", "đơn từ", "áp dụng cho", "khi đặt đơn", "khi mua")
+CANCEL_HINTS = ("đã xoá", "đã xóa", "đã huỷ", "đã hủy", "✗")
 
 
 @dataclass
@@ -47,7 +48,7 @@ class Receipt:
 
 
 def split_receipts(lines: list[str]) -> list[list[str]]:
-    starts = [i for i in range(len(lines) - 1) if RECEIPT_ID_RE.match(lines[i]) and (lines[i + 1].startswith("Làm xong đơn trước") or lines[i + 1].startswith("Đơn của"))]
+    starts = [i for i in range(len(lines) - 1) if RECEIPT_ID_RE.match(lines[i]) and (lines[i + 1].startswith("Làm xong đơn trước") or lines[i + 1].startswith("Đơn của") or lines[i + 1] == "Đã hủy")]
     if not starts:
         return [lines] if lines else []
     starts.append(len(lines))
@@ -110,12 +111,19 @@ def parse_receipt(lines: list[str]) -> Receipt:
                     discount_rows.append(Row("discount", clean_code, amt))
             continue
 
+        # Check if this is a cancelled line
+        is_cancelled = any(h in line.lower() for h in CANCEL_HINTS)
+        if is_cancelled:
+            pending_item_name = None
+            continue
+
         # 1. Full item on a single line: 1x Name 100.000₫
         if match := ITEM_RE.match(line):
             qty_num, name, amount_str = match.groups()
             current_qty = f"{qty_num}x"
             # Cancelled item (0x) should not add price to total
             if qty_num == "0":
+                pending_item_name = None
                 continue
             item_row = Row("item", name.strip(), parse_vn_number(amount_str))
             raw_items_with_qty.append((current_qty, item_row))
@@ -124,9 +132,10 @@ def parse_receipt(lines: list[str]) -> Receipt:
             pending_discount_text = []
             continue
 
-        # 2. Quantity header only: 1x
+        # 2. Quantity header only: 1x or 0x
         if match := QTY_ONLY_RE.match(line):
-            current_qty = f"{match.group(1)}x"
+            qty_num = match.group(1)
+            current_qty = f"{qty_num}x"
             pending_item_name = None
             pending_discount_text = []
             continue
@@ -134,9 +143,10 @@ def parse_receipt(lines: list[str]) -> Receipt:
         # 3. Item starts on line with quantity: 1x Name starts here...
         if match := QTY_ITEM_START_RE.match(line):
             qty_num, partial_name = match.groups()
-            if qty_num == "0":
-                continue
             current_qty = f"{qty_num}x"
+            if qty_num == "0":
+                pending_item_name = None
+                continue
             pending_item_name = (current_qty, partial_name.strip())
             pending_discount_text = []
             continue
@@ -151,14 +161,18 @@ def parse_receipt(lines: list[str]) -> Receipt:
                 last_target = ("discount", disc_row)
                 pending_discount_text = []
                 pending_item_name = None
-            else:
+                continue
+            elif current_qty != "0x":
                 if pending_item_name:
                     p_qty, p_name = pending_item_name
                     item_row = Row("item", p_name.strip(), amount)
                     raw_items_with_qty.append((p_qty, item_row))
                     last_target = ("item", item_row)
                     pending_item_name = None
-            continue
+                continue
+            else:
+                pending_item_name = None
+                continue
 
         # 5. Explicit line with trailing amount: Name/Code amount
         if match := TRAILING_AMOUNT_RE.match(line):
@@ -184,8 +198,8 @@ def parse_receipt(lines: list[str]) -> Receipt:
                 else:
                     pending_discount_text.append(line.strip())
                 continue
-            else:
-                # Positive amount: item name continuation or item without 1x prefix
+            elif current_qty != "0x":
+                # Positive amount: item name continuation or item without 1x prefix (only if not 0x)
                 if pending_item_name:
                     p_qty, p_name = pending_item_name
                     full_name = f"{p_name} {label_part.strip()}".strip()
@@ -198,6 +212,9 @@ def parse_receipt(lines: list[str]) -> Receipt:
                 pending_item_name = None
                 pending_discount_text = []
                 continue
+            else:
+                pending_item_name = None
+                continue
 
         # 6. Discount keyword/promo start line without amount: e.g. "Tặng ngay [Hàng tặng không bán]..."
         if any(hint in line.lower() for hint in DISCOUNT_HINTS):
@@ -207,16 +224,18 @@ def parse_receipt(lines: list[str]) -> Receipt:
         # 7. Wrapped text continuation line
         if pending_discount_text:
             pending_discount_text.append(line.strip())
-        elif pending_item_name:
+        elif pending_item_name and current_qty != "0x":
             p_qty, p_name = pending_item_name
             pending_item_name = (p_qty, f"{p_name} {line.strip()}".strip())
-        elif last_target:
+        elif last_target and current_qty != "0x":
             target_type, target_row = last_target
             target_row.label = f"{target_row.label} {line.strip()}".strip()
 
     # Group items by quantity dynamically (descending order: 3x, 2x, 1x...)
     qty_groups: dict[str, list[Row]] = {}
     for q, item in raw_items_with_qty:
+        if q == "0x" or q == "0":
+            continue
         if q not in qty_groups:
             qty_groups[q] = []
         qty_groups[q].append(item)
@@ -229,6 +248,8 @@ def parse_receipt(lines: list[str]) -> Receipt:
 
     organized_rows: list[Row] = []
     for q in sorted_qtys:
+        if q == "0x" or q == "0" or qty_sort_key(q) <= 0:
+            continue
         organized_rows.append(Row(type="qty", label=q))
         for item in qty_groups[q]:
             organized_rows.append(item)
