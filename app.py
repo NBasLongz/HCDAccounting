@@ -45,6 +45,7 @@ async def process(files: list[UploadFile] = File(...)):
     job_dir = JOB_STORAGE / job_id
     job_dir.mkdir(parents=True, exist_ok=True)
     receipts, errors, source_files = [], [], []
+    cancelled_files = []
     for source_index, upload in enumerate(files):
         filename = upload.filename or "file.pdf"
         if not filename.lower().endswith(".pdf"):
@@ -55,6 +56,10 @@ async def process(files: list[UploadFile] = File(...)):
         try:
             parsed = parse_pdf(str(path))
             if not parsed or not any(receipt.rows for receipt in parsed):
+                raw_lines = extract_lines(str(path))
+                if any("đã hủy" in l.lower() or "đã huỷ" in l.lower() for l in raw_lines):
+                    cancelled_files.append(filename)
+                    continue
                 raise ValueError("không nhận ra nội dung hoá đơn Mira GoodFood")
             for receipt in parsed:
                 receipt.display_name = filename if len(parsed) == 1 else f"{filename} — {receipt.receipt_id}"
@@ -64,6 +69,8 @@ async def process(files: list[UploadFile] = File(...)):
         except Exception as exc:
             errors.append(f"{filename}: không thể đọc PDF ({exc})")
     if not receipts:
+        if cancelled_files:
+            raise HTTPException(422, {"message": f"Toàn bộ {len(cancelled_files)} hoá đơn tải lên đều là hoá đơn ĐÃ HỦY (đã được tự động loại bỏ).", "errors": errors})
         raise HTTPException(422, {"message": "Không trích xuất được hoá đơn nào.", "errors": errors})
     out_path = os.path.join(tempfile.gettempdir(), f"hcd_export_{job_id}.xlsx")
     export(receipts, out_path)

@@ -48,7 +48,16 @@ class Receipt:
 
 
 def split_receipts(lines: list[str]) -> list[list[str]]:
-    starts = [i for i in range(len(lines) - 1) if RECEIPT_ID_RE.match(lines[i]) and (lines[i + 1].startswith("Làm xong đơn trước") or lines[i + 1].startswith("Đơn của") or lines[i + 1] == "Đã hủy")]
+    starts = [
+        i for i in range(len(lines) - 1)
+        if RECEIPT_ID_RE.match(lines[i]) and (
+            lines[i + 1].startswith("Làm xong đơn trước")
+            or lines[i + 1].startswith("Đơn của")
+            or lines[i + 1].startswith("Đã hủy")
+            or lines[i + 1].startswith("Đã huỷ")
+            or lines[i + 1].startswith("*****")
+        )
+    ]
     if not starts:
         return [lines] if lines else []
     starts.append(len(lines))
@@ -67,9 +76,25 @@ def parse_vn_number(raw: str) -> float:
     return -float(value) if negative else float(value)
 
 
-def parse_receipt(lines: list[str]) -> Receipt:
+def parse_receipt(lines: list[str]) -> Optional[Receipt]:
     if not lines:
-        raise ValueError("PDF không có nội dung văn bản")
+        return None
+
+    # Exclude cancelled receipt completely if header indicates cancellation (Đã hủy / Đã huỷ)
+    for line in lines[:15]:
+        l_lower = line.strip().lower()
+        if (
+            "đã hủy" in l_lower
+            or "đã huỷ" in l_lower
+            or "đơn bị hủy" in l_lower
+            or "đơn bị huỷ" in l_lower
+            or "đã bị hủy" in l_lower
+            or "đã bị huỷ" in l_lower
+            or "cancelled" in l_lower
+            or "canceled" in l_lower
+        ):
+            return None
+
     receipt_id = lines[0]
     receipt = Receipt(receipt_id=receipt_id, display_name=f"Receipt-{receipt_id}.pdf")
     current_qty: str = "1x"
@@ -111,7 +136,7 @@ def parse_receipt(lines: list[str]) -> Receipt:
                     discount_rows.append(Row("discount", clean_code, amt))
             continue
 
-        # Check if this is a cancelled line
+        # Check if this is a cancelled item line
         is_cancelled = any(h in line.lower() for h in CANCEL_HINTS)
         if is_cancelled:
             pending_item_name = None
@@ -273,4 +298,6 @@ def parse_receipt(lines: list[str]) -> Receipt:
 
 
 def parse_pdf(pdf_path: str) -> list[Receipt]:
-    return [parse_receipt(part) for part in split_receipts(extract_lines(pdf_path))]
+    raw_lines = extract_lines(pdf_path)
+    parsed = [parse_receipt(part) for part in split_receipts(raw_lines)]
+    return [r for r in parsed if r is not None]
