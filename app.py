@@ -117,7 +117,17 @@ async def source_pdf(job_id: str, source_index: int):
     path = JOB_STORAGE / job_id / f"{source_index:03d}.pdf"
     if not path.exists():
         raise HTTPException(404, "PDF nguồn không còn tồn tại")
-    return FileResponse(path, media_type="application/pdf", filename=path.name, content_disposition_type="inline")
+    return FileResponse(
+        path,
+        media_type="application/pdf",
+        filename=path.name,
+        content_disposition_type="inline",
+        headers={
+            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )
 
 
 @app.put("/api/v1/receipts/jobs/{job_id}/results")

@@ -2077,15 +2077,19 @@
     function populatePdf() {
       pdfSelect.innerHTML = result.source_files.map(f => `<option value="${f.index}">${esc(f.name)}</option>`).join('');
       pdfSelect.disabled = !result.source_files.length;
-      pdfSelect.value = activeSource;
+      pdfSelect.value = String(activeSource);
       showPdf();
     }
 
     function showPdf() {
-      if (jobId !== null) {
-        pdf.src = `/api/v1/receipts/jobs/${jobId}/pdf/${activeSource}#toolbar=1&navpanes=0`;
+      if (jobId !== null && jobId !== undefined) {
+        const targetUrl = `/api/v1/receipts/jobs/${jobId}/pdf/${activeSource}?t=${Date.now()}#toolbar=1&navpanes=0`;
+        pdf.src = 'about:blank';
+        setTimeout(() => {
+          pdf.src = targetUrl;
+        }, 30);
       }
-      pdfSelect.value = activeSource;
+      pdfSelect.value = String(activeSource);
     }
     pdfSelect.onchange = () => {
       activeSource = Number(pdfSelect.value);
@@ -2094,9 +2098,11 @@
 
     function selectReceipt(i) {
       playCuteSound('pop');
-      activeSource = Number(result.receipts[i].source_file_index || 0);
-      showPdf();
-      document.querySelector('.panel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (result && result.receipts && result.receipts[i]) {
+        activeSource = Number(result.receipts[i].source_file_index || 0);
+        showPdf();
+      }
+      document.querySelector('.panel-right')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function recalc() {
