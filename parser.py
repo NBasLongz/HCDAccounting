@@ -18,17 +18,16 @@ def extract_lines(pdf_path: str) -> list[str]:
     return lines
 
 
-RECEIPT_ID_RE = re.compile(r"^[A-Za-zÀ-Ỹà-ỹ]{1,6}-\d{1,6}$")
+RECEIPT_ID_RE = re.compile(r"^[A-Za-zÀ-Ỹà-ỹ]{1,6}-\d{1,6}[A-Za-z]?$")
 ITEM_RE = re.compile(r"^(\d+)x\s+(.+?)\s+(-?[\d][\d.,]*)\s*₫?$")
 QTY_ITEM_START_RE = re.compile(r"^(\d+)x\s+(.+)$")
 QTY_ONLY_RE = re.compile(r"^(\d+)x$")
 TRAILING_AMOUNT_RE = re.compile(r"^(.+?)\s+(-?[\d][\d.,]*)\s*₫?$")
 AMOUNT_ONLY_RE = re.compile(r"^(-?[\d][\d.,]*)\s*₫?$")
-PROMO_CODE_RE = re.compile(r"^[A-Z0-9]{6,20}$")
+PROMO_CODE_RE = re.compile(r"^[A-Z0-9]{6,25}$")
 ITEM_COUNT_RE = re.compile(r"^\d+\s*món$")
-DISCOUNT_HINTS = ("sale", "giảm giá", "ưu đãi", "khuyến mãi", "tặng ngay", "tặng kèm", "🌸", "🔥", "🍀", "🍄")
+DISCOUNT_HINTS = ("sale", "giảm giá", "ưu đãi", "khuyến mãi", "tặng ngay", "tặng kèm", "trái cây giảm sốc", "đồng tài trợ", "🌸", "🔥", "🍀", "🍄")
 CONDITION_KEYWORDS = ("tối thiểu", "đơn từ", "áp dụng cho", "khi đặt đơn", "khi mua")
-STOP_PREFIXES = ("Tổng tạm tính", "Bao gồm thuế", "Tổng cộng", "Mira GoodFood")
 
 
 @dataclass
@@ -48,7 +47,7 @@ class Receipt:
 
 
 def split_receipts(lines: list[str]) -> list[list[str]]:
-    starts = [i for i in range(len(lines) - 1) if RECEIPT_ID_RE.match(lines[i]) and lines[i + 1].startswith("Làm xong đơn trước")]
+    starts = [i for i in range(len(lines) - 1) if RECEIPT_ID_RE.match(lines[i]) and (lines[i + 1].startswith("Làm xong đơn trước") or lines[i + 1].startswith("Đơn của"))]
     if not starts:
         return [lines] if lines else []
     starts.append(len(lines))
@@ -80,23 +79,44 @@ def parse_receipt(lines: list[str]) -> Receipt:
     last_target: Optional[tuple[str, Row]] = None
     pending_item_name: Optional[tuple[str, str]] = None
     pending_discount_text: list[str] = []
+    in_summary_discount_section = False
 
-    # First, find pdf_total from the full lines of the receipt
+    # Extract pdf_total from the full lines of the receipt
     for line in lines:
         if line.startswith("Tổng cộng") and (match := TRAILING_AMOUNT_RE.match(line)):
             receipt.pdf_total = parse_vn_number(match.group(2))
 
     for line in lines[1:]:
-        # Stop parsing at the summary footer (Tổng tạm tính, Bao gồm thuế, Tổng cộng...)
-        if any(line.startswith(prefix) for prefix in STOP_PREFIXES):
+        if line.startswith("Tổng cộng") or line.startswith("Mira GoodFood"):
             break
-        if line == receipt_id or ITEM_COUNT_RE.match(line) or line == "Giảm giá":
+        if line == receipt_id or ITEM_COUNT_RE.match(line) or line.startswith("Làm xong đơn trước") or line.startswith("Đơn của") or line == "Đã hủy":
+            continue
+        if line.startswith("Tổng tạm tính") or line.startswith("Bao gồm thuế"):
+            continue
+        if line == "Giảm giá":
+            in_summary_discount_section = True
+            continue
+
+        # In summary discount section (between Giảm giá and Tổng cộng):
+        if in_summary_discount_section:
+            if match := TRAILING_AMOUNT_RE.match(line):
+                code_or_lbl, raw_amt = match.groups()
+                clean_code = code_or_lbl.strip()
+                # Check if this is an order voucher code (e.g. SPLHIG299A5PLZU 30.000₫)
+                if PROMO_CODE_RE.match(clean_code):
+                    amt = parse_vn_number(raw_amt)
+                    if amt > 0:
+                        amt = -amt
+                    discount_rows.append(Row("discount", clean_code, amt))
             continue
 
         # 1. Full item on a single line: 1x Name 100.000₫
         if match := ITEM_RE.match(line):
             qty_num, name, amount_str = match.groups()
             current_qty = f"{qty_num}x"
+            # Cancelled item (0x) should not add price to total
+            if qty_num == "0":
+                continue
             item_row = Row("item", name.strip(), parse_vn_number(amount_str))
             raw_items_with_qty.append((current_qty, item_row))
             last_target = ("item", item_row)
@@ -114,6 +134,8 @@ def parse_receipt(lines: list[str]) -> Receipt:
         # 3. Item starts on line with quantity: 1x Name starts here...
         if match := QTY_ITEM_START_RE.match(line):
             qty_num, partial_name = match.groups()
+            if qty_num == "0":
+                continue
             current_qty = f"{qty_num}x"
             pending_item_name = (current_qty, partial_name.strip())
             pending_discount_text = []
