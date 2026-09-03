@@ -23,10 +23,12 @@ ITEM_RE = re.compile(r"^(\d+)x\s+(.+?)\s+(-?[\d][\d.,]*)\s*₫?$")
 QTY_ITEM_START_RE = re.compile(r"^(\d+)x\s+(.+)$")
 QTY_ONLY_RE = re.compile(r"^(\d+)x$")
 TRAILING_AMOUNT_RE = re.compile(r"^(.+?)\s+(-?[\d][\d.,]*)\s*₫?$")
+AMOUNT_ONLY_RE = re.compile(r"^(-?[\d][\d.,]*)\s*₫?$")
 PROMO_CODE_RE = re.compile(r"^[A-Z0-9]{6,20}$")
 ITEM_COUNT_RE = re.compile(r"^\d+\s*món$")
-DISCOUNT_HINTS = ("sale", "giảm giá", "ưu đãi", "khuyến mãi", "🌸", "🔥", "🍀", "🍄")
-SKIP_PREFIXES = ("Làm xong đơn trước", "Đơn của", "Tổng tạm tính", "Bao gồm thuế", "Tổng cộng")
+DISCOUNT_HINTS = ("sale", "giảm giá", "ưu đãi", "khuyến mãi", "tặng ngay", "tặng kèm", "🌸", "🔥", "🍀", "🍄")
+CONDITION_KEYWORDS = ("tối thiểu", "đơn từ", "áp dụng cho", "khi đặt đơn", "khi mua")
+STOP_PREFIXES = ("Tổng tạm tính", "Bao gồm thuế", "Tổng cộng", "Mira GoodFood")
 
 
 @dataclass
@@ -71,86 +73,116 @@ def parse_receipt(lines: list[str]) -> Receipt:
     receipt_id = lines[0]
     receipt = Receipt(receipt_id=receipt_id, display_name=f"Receipt-{receipt_id}.pdf")
     current_qty: str = "1x"
-    in_discount_section = False
 
     raw_items_with_qty: list[tuple[str, Row]] = []
     discount_rows: list[Row] = []
 
     last_target: Optional[tuple[str, Row]] = None
     pending_item_name: Optional[tuple[str, str]] = None
+    pending_discount_text: list[str] = []
+
+    # First, find pdf_total from the full lines of the receipt
+    for line in lines:
+        if line.startswith("Tổng cộng") and (match := TRAILING_AMOUNT_RE.match(line)):
+            receipt.pdf_total = parse_vn_number(match.group(2))
 
     for line in lines[1:]:
-        if line.startswith("Mira GoodFood"):
+        # Stop parsing at the summary footer (Tổng tạm tính, Bao gồm thuế, Tổng cộng...)
+        if any(line.startswith(prefix) for prefix in STOP_PREFIXES):
             break
-        if line == receipt_id or ITEM_COUNT_RE.match(line):
-            continue
-        if line == "Giảm giá":
-            in_discount_section = True
-            continue
-        if any(line.startswith(prefix) for prefix in SKIP_PREFIXES):
-            if line.startswith("Tổng cộng") and (match := TRAILING_AMOUNT_RE.match(line)):
-                receipt.pdf_total = parse_vn_number(match.group(2))
+        if line == receipt_id or ITEM_COUNT_RE.match(line) or line == "Giảm giá":
             continue
 
         # 1. Full item on a single line: 1x Name 100.000₫
         if match := ITEM_RE.match(line):
-            qty_num, name, amount = match.groups()
+            qty_num, name, amount_str = match.groups()
             current_qty = f"{qty_num}x"
-            item_row = Row("item", name.strip(), parse_vn_number(amount))
+            item_row = Row("item", name.strip(), parse_vn_number(amount_str))
             raw_items_with_qty.append((current_qty, item_row))
             last_target = ("item", item_row)
             pending_item_name = None
-            in_discount_section = False
+            pending_discount_text = []
             continue
 
         # 2. Quantity header only: 1x
         if match := QTY_ONLY_RE.match(line):
             current_qty = f"{match.group(1)}x"
             pending_item_name = None
+            pending_discount_text = []
             continue
 
-        # 3. Item starts on line with quantity but amount is wrapped to next line: 1x Name starts here...
+        # 3. Item starts on line with quantity: 1x Name starts here...
         if match := QTY_ITEM_START_RE.match(line):
             qty_num, partial_name = match.groups()
             current_qty = f"{qty_num}x"
             pending_item_name = (current_qty, partial_name.strip())
+            pending_discount_text = []
             continue
 
-        # 4. Discount by keyword/emoji hint: 🌸Flash sale 50% -9.920₫
-        if any(hint in line.lower() or hint in line for hint in DISCOUNT_HINTS):
-            if match := TRAILING_AMOUNT_RE.match(line):
-                disc_row = Row("discount", match.group(1).strip(), parse_vn_number(match.group(2)))
+        # 4. Amount ONLY line (e.g. "-199.000" or "100.000")
+        if match := AMOUNT_ONLY_RE.match(line):
+            amount = parse_vn_number(match.group(1))
+            if amount < 0:
+                full_disc_label = " ".join(pending_discount_text).strip() or "Giảm giá"
+                disc_row = Row("discount", full_disc_label, amount)
                 discount_rows.append(disc_row)
                 last_target = ("discount", disc_row)
+                pending_discount_text = []
                 pending_item_name = None
-            continue
-
-        # 5. Line with trailing amount: Name/Code amount
-        if match := TRAILING_AMOUNT_RE.match(line):
-            label, raw_amount = match.groups()
-            amount = parse_vn_number(raw_amount)
-            if in_discount_section and PROMO_CODE_RE.match(label.strip()) and amount > 0:
-                amount = -amount
-
-            if amount < 0 or in_discount_section:
-                disc_row = Row("discount", label.strip(), amount)
-                discount_rows.append(disc_row)
-                last_target = ("discount", disc_row)
             else:
                 if pending_item_name:
                     p_qty, p_name = pending_item_name
-                    full_name = f"{p_name} {label.strip()}".strip()
+                    item_row = Row("item", p_name.strip(), amount)
+                    raw_items_with_qty.append((p_qty, item_row))
+                    last_target = ("item", item_row)
+                    pending_item_name = None
+            continue
+
+        # 5. Explicit line with trailing amount: Name/Code amount
+        if match := TRAILING_AMOUNT_RE.match(line):
+            label_part, raw_amount = match.groups()
+            amount = parse_vn_number(raw_amount)
+            is_condition_text = any(kw in line.lower() for kw in CONDITION_KEYWORDS)
+
+            if amount < 0:
+                # Negative amount is a discount
+                full_disc_label = " ".join(pending_discount_text + ([label_part.strip()] if label_part.strip() else [])).strip()
+                if not full_disc_label:
+                    full_disc_label = "Giảm giá"
+                disc_row = Row("discount", full_disc_label, amount)
+                discount_rows.append(disc_row)
+                last_target = ("discount", disc_row)
+                pending_discount_text = []
+                pending_item_name = None
+                continue
+            elif is_condition_text:
+                # Condition text inside promo (e.g. "đặt đơn tối thiểu 398.000₫")
+                pending_discount_text.append(line.strip())
+                continue
+            else:
+                # Positive amount: item name continuation or item without 1x prefix
+                if pending_item_name:
+                    p_qty, p_name = pending_item_name
+                    full_name = f"{p_name} {label_part.strip()}".strip()
                     item_row = Row("item", full_name, amount)
                     raw_items_with_qty.append((p_qty, item_row))
                 else:
-                    item_row = Row("item", label.strip(), amount)
+                    item_row = Row("item", label_part.strip(), amount)
                     raw_items_with_qty.append((current_qty, item_row))
                 last_target = ("item", item_row)
-            pending_item_name = None
+                pending_item_name = None
+                pending_discount_text = []
+                continue
+
+        # 6. Discount keyword/promo start line without amount: e.g. "Tặng ngay [Hàng tặng không bán]..."
+        if any(hint in line.lower() for hint in DISCOUNT_HINTS):
+            pending_discount_text.append(line.strip())
             continue
 
-        # 6. Text-only wrapped continuation line (no price, no qty prefix)
-        if pending_item_name:
+        # 7. Wrapped text continuation line
+        if pending_discount_text:
+            pending_discount_text.append(line.strip())
+        elif pending_item_name:
             p_qty, p_name = pending_item_name
             pending_item_name = (p_qty, f"{p_name} {line.strip()}".strip())
         elif last_target:
