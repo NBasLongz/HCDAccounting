@@ -157,7 +157,10 @@ def parse_receipt(lines: list[str]) -> Receipt:
                 continue
             elif is_condition_text:
                 # Condition text inside promo (e.g. "đặt đơn tối thiểu 398.000₫")
-                pending_discount_text.append(line.strip())
+                if last_target and last_target[0] == "discount":
+                    last_target[1].label = f"{last_target[1].label} {line.strip()}".strip()
+                else:
+                    pending_discount_text.append(line.strip())
                 continue
             else:
                 # Positive amount: item name continuation or item without 1x prefix
